@@ -1,0 +1,945 @@
+{
+  "incheon-medical-tourism": [
+    {
+      "file": "/images/construction/incheon-medical-tourism/0.jpg",
+      "w": 1400,
+      "h": 697,
+      "page": 33,
+      "isRender": false
+    }
+  ],
+  "somnus": [
+    {
+      "file": "/images/construction/somnus/0.jpg",
+      "w": 749,
+      "h": 498,
+      "page": 33,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/somnus/1.jpg",
+      "w": 952,
+      "h": 648,
+      "page": 33,
+      "isRender": false
+    }
+  ],
+  "hwajeong-bom-clinic": [
+    {
+      "file": "/images/construction/hwajeong-bom-clinic/0.jpg",
+      "w": 517,
+      "h": 691,
+      "page": 34,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/hwajeong-bom-clinic/1.jpg",
+      "w": 934,
+      "h": 637,
+      "page": 34,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/hwajeong-bom-clinic/2.jpg",
+      "w": 514,
+      "h": 652,
+      "page": 34,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/hwajeong-bom-clinic/3.jpg",
+      "w": 930,
+      "h": 691,
+      "page": 34,
+      "isRender": false
+    }
+  ],
+  "okgil-daycare": [
+    {
+      "file": "/images/construction/okgil-daycare/0.jpg",
+      "w": 747,
+      "h": 365,
+      "page": 35,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/okgil-daycare/1.jpg",
+      "w": 752,
+      "h": 365,
+      "page": 35,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/okgil-daycare/2.jpg",
+      "w": 752,
+      "h": 365,
+      "page": 35,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/okgil-daycare/3.jpg",
+      "w": 758,
+      "h": 365,
+      "page": 35,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/okgil-daycare/4.jpg",
+      "w": 1131,
+      "h": 544,
+      "page": 35,
+      "isRender": false
+    }
+  ],
+  "cheongna-chowon-daycare-1": [
+    {
+      "file": "/images/construction/cheongna-chowon-daycare-1/0.jpg",
+      "w": 1144,
+      "h": 724,
+      "page": 36,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/cheongna-chowon-daycare-1/1.jpg",
+      "w": 627,
+      "h": 412,
+      "page": 36,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/cheongna-chowon-daycare-1/2.jpg",
+      "w": 610,
+      "h": 414,
+      "page": 36,
+      "isRender": false
+    }
+  ],
+  "cheongna-chowon-daycare-2": [
+    {
+      "file": "/images/construction/cheongna-chowon-daycare-2/0.jpg",
+      "w": 985,
+      "h": 711,
+      "page": 37,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/cheongna-chowon-daycare-2/1.jpg",
+      "w": 486,
+      "h": 368,
+      "page": 37,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/cheongna-chowon-daycare-2/2.jpg",
+      "w": 486,
+      "h": 368,
+      "page": 37,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/cheongna-chowon-daycare-2/3.jpg",
+      "w": 489,
+      "h": 373,
+      "page": 37,
+      "isRender": false
+    }
+  ],
+  "jungang-hanbang-hospital": [
+    {
+      "file": "/images/construction/jungang-hanbang-hospital/0.jpg",
+      "w": 1400,
+      "h": 648,
+      "page": 38,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/jungang-hanbang-hospital/1.jpg",
+      "w": 1257,
+      "h": 586,
+      "page": 38,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/jungang-hanbang-hospital/2.jpg",
+      "w": 1260,
+      "h": 586,
+      "page": 38,
+      "isRender": false
+    }
+  ],
+  "incheon-port-terminal-hall": [
+    {
+      "file": "/images/construction/incheon-port-terminal-hall/0.jpg",
+      "w": 1348,
+      "h": 635,
+      "page": 39,
+      "isRender": true
+    },
+    {
+      "file": "/images/construction/incheon-port-terminal-hall/1.jpg",
+      "w": 1321,
+      "h": 712,
+      "page": 39,
+      "isRender": true
+    }
+  ],
+  "gajwa3-hana-daycare": [
+    {
+      "file": "/images/construction/gajwa3-hana-daycare/0.jpg",
+      "w": 1242,
+      "h": 600,
+      "page": 40,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/gajwa3-hana-daycare/1.jpg",
+      "w": 749,
+      "h": 389,
+      "page": 40,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/gajwa3-hana-daycare/2.jpg",
+      "w": 749,
+      "h": 389,
+      "page": 40,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/gajwa3-hana-daycare/3.jpg",
+      "w": 313,
+      "h": 332,
+      "page": 40,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/gajwa3-hana-daycare/4.jpg",
+      "w": 615,
+      "h": 332,
+      "page": 40,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/gajwa3-hana-daycare/5.jpg",
+      "w": 619,
+      "h": 332,
+      "page": 40,
+      "isRender": false
+    }
+  ],
+  "bupyeong-jaega-center": [
+    {
+      "file": "/images/construction/bupyeong-jaega-center/0.jpg",
+      "w": 1125,
+      "h": 657,
+      "page": 41,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/bupyeong-jaega-center/1.jpg",
+      "w": 901,
+      "h": 555,
+      "page": 41,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/bupyeong-jaega-center/2.jpg",
+      "w": 990,
+      "h": 610,
+      "page": 41,
+      "isRender": false
+    }
+  ],
+  "songdo-convensia-office": [
+    {
+      "file": "/images/construction/songdo-convensia-office/0.jpg",
+      "w": 1012,
+      "h": 336,
+      "page": 42,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/songdo-convensia-office/1.jpg",
+      "w": 1242,
+      "h": 682,
+      "page": 42,
+      "isRender": false
+    }
+  ],
+  "uijeongbu-barreuljeong-hospital": [
+    {
+      "file": "/images/construction/uijeongbu-barreuljeong-hospital/0.jpg",
+      "w": 377,
+      "h": 348,
+      "page": 43,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/uijeongbu-barreuljeong-hospital/1.jpg",
+      "w": 374,
+      "h": 349,
+      "page": 43,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/uijeongbu-barreuljeong-hospital/2.jpg",
+      "w": 895,
+      "h": 431,
+      "page": 43,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/uijeongbu-barreuljeong-hospital/3.jpg",
+      "w": 1269,
+      "h": 547,
+      "page": 43,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/uijeongbu-barreuljeong-hospital/4.jpg",
+      "w": 1400,
+      "h": 694,
+      "page": 43,
+      "isRender": false
+    }
+  ],
+  "michuhol-media-park": [
+    {
+      "file": "/images/construction/michuhol-media-park/0.jpg",
+      "w": 643,
+      "h": 415,
+      "page": 44,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/michuhol-media-park/1.jpg",
+      "w": 423,
+      "h": 427,
+      "page": 44,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/michuhol-media-park/2.jpg",
+      "w": 754,
+      "h": 559,
+      "page": 44,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/michuhol-media-park/3.jpg",
+      "w": 826,
+      "h": 468,
+      "page": 44,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/michuhol-media-park/4.jpg",
+      "w": 934,
+      "h": 561,
+      "page": 44,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/michuhol-media-park/5.jpg",
+      "w": 804,
+      "h": 544,
+      "page": 44,
+      "isRender": false
+    }
+  ],
+  "yeonhui-bukcafe": [
+    {
+      "file": "/images/construction/yeonhui-bukcafe/0.jpg",
+      "w": 1081,
+      "h": 655,
+      "page": 45,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/yeonhui-bukcafe/1.jpg",
+      "w": 669,
+      "h": 414,
+      "page": 45,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/yeonhui-bukcafe/2.jpg",
+      "w": 670,
+      "h": 400,
+      "page": 45,
+      "isRender": false
+    }
+  ],
+  "dahamkke-5": [
+    {
+      "file": "/images/construction/dahamkke-5/0.jpg",
+      "w": 631,
+      "h": 391,
+      "page": 46,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/dahamkke-5/1.jpg",
+      "w": 633,
+      "h": 394,
+      "page": 46,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/dahamkke-5/2.jpg",
+      "w": 634,
+      "h": 391,
+      "page": 46,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/dahamkke-5/3.jpg",
+      "w": 633,
+      "h": 394,
+      "page": 46,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/dahamkke-5/4.jpg",
+      "w": 633,
+      "h": 391,
+      "page": 46,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/dahamkke-5/5.jpg",
+      "w": 634,
+      "h": 391,
+      "page": 46,
+      "isRender": false
+    }
+  ],
+  "isarang-ggumteo-ganghwa": [
+    {
+      "file": "/images/construction/isarang-ggumteo-ganghwa/0.jpg",
+      "w": 1093,
+      "h": 795,
+      "page": 47,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/isarang-ggumteo-ganghwa/1.jpg",
+      "w": 682,
+      "h": 658,
+      "page": 47,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/isarang-ggumteo-ganghwa/2.jpg",
+      "w": 649,
+      "h": 424,
+      "page": 47,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/isarang-ggumteo-ganghwa/3.jpg",
+      "w": 818,
+      "h": 458,
+      "page": 47,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/isarang-ggumteo-ganghwa/4.jpg",
+      "w": 588,
+      "h": 393,
+      "page": 47,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/isarang-ggumteo-ganghwa/5.jpg",
+      "w": 706,
+      "h": 424,
+      "page": 47,
+      "isRender": false
+    }
+  ],
+  "munhak-high-school": [
+    {
+      "file": "/images/construction/munhak-high-school/0.jpg",
+      "w": 751,
+      "h": 563,
+      "page": 48,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/munhak-high-school/1.jpg",
+      "w": 751,
+      "h": 563,
+      "page": 48,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/munhak-high-school/2.jpg",
+      "w": 751,
+      "h": 563,
+      "page": 48,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/munhak-high-school/3.jpg",
+      "w": 751,
+      "h": 563,
+      "page": 48,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/munhak-high-school/4.jpg",
+      "w": 751,
+      "h": 563,
+      "page": 48,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/munhak-high-school/5.jpg",
+      "w": 751,
+      "h": 563,
+      "page": 48,
+      "isRender": false
+    }
+  ],
+  "isarang-ggumteo-michuhol-8": [
+    {
+      "file": "/images/construction/isarang-ggumteo-michuhol-8/0.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 49,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/isarang-ggumteo-michuhol-8/1.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 49,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/isarang-ggumteo-michuhol-8/2.jpg",
+      "w": 749,
+      "h": 563,
+      "page": 49,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/isarang-ggumteo-michuhol-8/3.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 49,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/isarang-ggumteo-michuhol-8/4.jpg",
+      "w": 501,
+      "h": 562,
+      "page": 49,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/isarang-ggumteo-michuhol-8/5.jpg",
+      "w": 501,
+      "h": 562,
+      "page": 49,
+      "isRender": false
+    }
+  ],
+  "unit5378-mess-hall": [
+    {
+      "file": "/images/construction/unit5378-mess-hall/0.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 50,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/unit5378-mess-hall/1.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 50,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/unit5378-mess-hall/2.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 50,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/unit5378-mess-hall/3.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 50,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/unit5378-mess-hall/4.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 50,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/unit5378-mess-hall/5.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 50,
+      "isRender": false
+    }
+  ],
+  "seogu-welfare-foundation-office": [
+    {
+      "file": "/images/construction/seogu-welfare-foundation-office/0.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 51,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/seogu-welfare-foundation-office/1.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 51,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/seogu-welfare-foundation-office/2.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 51,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/seogu-welfare-foundation-office/3.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 51,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/seogu-welfare-foundation-office/4.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 51,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/seogu-welfare-foundation-office/5.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 51,
+      "isRender": false
+    }
+  ],
+  "seodongi-daycare": [
+    {
+      "file": "/images/construction/seodongi-daycare/0.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 52,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/seodongi-daycare/1.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 52,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/seodongi-daycare/2.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 52,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/seodongi-daycare/3.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 52,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/seodongi-daycare/4.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 52,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/seodongi-daycare/5.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 52,
+      "isRender": false
+    }
+  ],
+  "incheon-ara-highschool": [
+    {
+      "file": "/images/construction/incheon-ara-highschool/0.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 53,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/incheon-ara-highschool/1.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 53,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/incheon-ara-highschool/2.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 53,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/incheon-ara-highschool/3.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 53,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/incheon-ara-highschool/4.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 53,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/incheon-ara-highschool/5.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 53,
+      "isRender": false
+    }
+  ],
+  "yeongjong-skyville-apt": [
+    {
+      "file": "/images/construction/yeongjong-skyville-apt/0.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 54,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/yeongjong-skyville-apt/1.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 54,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/yeongjong-skyville-apt/2.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 54,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/yeongjong-skyville-apt/3.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 54,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/yeongjong-skyville-apt/4.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 54,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/yeongjong-skyville-apt/5.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 54,
+      "isRender": false
+    }
+  ],
+  "rosy-popup-garden": [
+    {
+      "file": "/images/construction/rosy-popup-garden/0.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 55,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/rosy-popup-garden/1.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 55,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/rosy-popup-garden/2.jpg",
+      "w": 749,
+      "h": 490,
+      "page": 55,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/rosy-popup-garden/3.jpg",
+      "w": 749,
+      "h": 490,
+      "page": 55,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/rosy-popup-garden/4.jpg",
+      "w": 749,
+      "h": 490,
+      "page": 55,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/rosy-popup-garden/5.jpg",
+      "w": 749,
+      "h": 490,
+      "page": 55,
+      "isRender": false
+    }
+  ],
+  "cheongna-huiraegaek": [
+    {
+      "file": "/images/construction/cheongna-huiraegaek/0.jpg",
+      "w": 749,
+      "h": 499,
+      "page": 56,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/cheongna-huiraegaek/1.jpg",
+      "w": 749,
+      "h": 499,
+      "page": 56,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/cheongna-huiraegaek/2.jpg",
+      "w": 749,
+      "h": 500,
+      "page": 56,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/cheongna-huiraegaek/3.jpg",
+      "w": 749,
+      "h": 500,
+      "page": 56,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/cheongna-huiraegaek/4.jpg",
+      "w": 749,
+      "h": 517,
+      "page": 56,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/cheongna-huiraegaek/5.jpg",
+      "w": 749,
+      "h": 517,
+      "page": 56,
+      "isRender": false
+    }
+  ],
+  "unit-bathhouse": [
+    {
+      "file": "/images/construction/unit-bathhouse/0.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 57,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/unit-bathhouse/1.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 57,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/unit-bathhouse/2.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 57,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/unit-bathhouse/3.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 57,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/unit-bathhouse/4.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 57,
+      "isRender": false
+    },
+    {
+      "file": "/images/construction/unit-bathhouse/5.jpg",
+      "w": 749,
+      "h": 562,
+      "page": 57,
+      "isRender": false
+    }
+  ],
+  "katech-proposal": [
+    {
+      "file": "/images/construction/katech-proposal/0.jpg",
+      "w": 1400,
+      "h": 787,
+      "page": 59,
+      "isRender": true
+    },
+    {
+      "file": "/images/construction/katech-proposal/1.jpg",
+      "w": 749,
+      "h": 421,
+      "page": 59,
+      "isRender": true
+    },
+    {
+      "file": "/images/construction/katech-proposal/2.jpg",
+      "w": 749,
+      "h": 421,
+      "page": 59,
+      "isRender": true
+    },
+    {
+      "file": "/images/construction/katech-proposal/3.jpg",
+      "w": 749,
+      "h": 421,
+      "page": 59,
+      "isRender": true
+    },
+    {
+      "file": "/images/construction/katech-proposal/4.jpg",
+      "w": 749,
+      "h": 421,
+      "page": 59,
+      "isRender": true
+    },
+    {
+      "file": "/images/construction/katech-proposal/5.jpg",
+      "w": 1400,
+      "h": 787,
+      "page": 60,
+      "isRender": true
+    }
+  ]
+}
