@@ -20,6 +20,7 @@ export function PortfolioCard({
   const hasStages = Boolean(project.images.before || project.images.after);
   const hasGallery = Boolean(project.images.gallery?.length);
   const coverIsRender = project.images.gallery?.[0]?.isRender;
+  const coverIsAiExample = project.images.gallery?.[0]?.isAiExample;
 
   return (
     <Link
@@ -36,9 +37,12 @@ export function PortfolioCard({
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           />
         ) : (
-          <PlaceholderImage className="h-full w-full" label={category?.label} />
+          <PlaceholderImage
+            className="h-full w-full"
+            label={coverIsAiExample ? "AI 생성 이미지 준비 중" : category?.label}
+          />
         )}
-        {project.sample && (
+        {project.sample && !coverIsAiExample && (
           <div className="absolute right-3 top-3">
             <SampleBadge />
           </div>
@@ -46,6 +50,11 @@ export function PortfolioCard({
         {coverIsRender && (
           <div className="absolute right-3 top-3">
             <Badge tone="orange">3D 렌더링</Badge>
+          </div>
+        )}
+        {coverIsAiExample && (
+          <div className="absolute right-3 top-3">
+            <Badge tone="violet">AI 생성 예시 이미지</Badge>
           </div>
         )}
         {hasStages && (

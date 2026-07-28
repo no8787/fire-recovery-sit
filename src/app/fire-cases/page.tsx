@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AlertTriangle } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { FireRecoveryIllustration } from "@/components/ui/FireRecoveryIllustration";
 import { PortfolioCard } from "@/components/portfolio/PortfolioCard";
 import { fireCaseCategories, getFireCasesByCategory } from "@/lib/data/fire-recovery-cases";
+import { fireRecoveryExamples } from "@/lib/data/fire-recovery-examples";
 
 export const metadata: Metadata = {
   title: "화재복구 사례",
@@ -88,6 +90,39 @@ export default async function FireCasesPage({
               </div>
             </div>
           )}
+        </Container>
+      </section>
+
+      <section className="border-t border-slate-200 bg-slate-50 py-14 sm:py-16">
+        <Container>
+          <p className="text-xs font-bold uppercase tracking-wide text-orange-600">
+            화재복구 과정 예시
+          </p>
+          <h2 className="mt-1.5 text-xl font-extrabold text-slate-900 sm:text-2xl">
+            화재복구는 이런 순서로 진행됩니다
+          </h2>
+
+          <div
+            role="note"
+            className="mt-5 flex items-start gap-2.5 rounded-xl border border-violet-200 bg-violet-50 px-4 py-3.5 text-sm text-violet-900"
+          >
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-violet-600" aria-hidden="true" />
+            <p>
+              아래 이미지는 화재복구 절차의 이해를 돕기 위한 AI 생성 예시 이미지이며,
+              (주)더가연의 실제 시공사례가 아닙니다.
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            {fireRecoveryExamples.map((project) => (
+              <PortfolioCard
+                key={project.id}
+                project={project}
+                categories={fireCaseCategories}
+                linkBase="/fire-cases/examples"
+              />
+            ))}
+          </div>
         </Container>
       </section>
     </>

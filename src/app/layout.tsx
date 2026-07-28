@@ -3,6 +3,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileCTA } from "@/components/layout/MobileCTA";
+import { FloatingActions } from "@/components/layout/FloatingActions";
 import { COMPANY, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -59,6 +60,7 @@ export default function RootLayout({
         <main className="flex-1 pb-16 md:pb-0">{children}</main>
         <Footer />
         <MobileCTA />
+        <FloatingActions />
       </body>
     </html>
   );

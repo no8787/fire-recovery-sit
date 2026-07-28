@@ -121,11 +121,16 @@ export interface Database {
           is_featured: boolean;
           is_sample: boolean;
           status: ContentStatus;
+          sort_order: number;
           published_at: string | null;
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database["public"]["Tables"]["projects"]["Row"], "id" | "created_at" | "updated_at">;
+        Insert: Omit<
+          Database["public"]["Tables"]["projects"]["Row"],
+          "id" | "created_at" | "updated_at" | "sort_order"
+        > &
+          Partial<Pick<Database["public"]["Tables"]["projects"]["Row"], "sort_order">>;
         Update: Partial<Database["public"]["Tables"]["projects"]["Row"]>;
         Relationships: [];
       };
@@ -137,6 +142,8 @@ export interface Database {
           stage: ImageStage | null;
           is_render: boolean;
           sort_order: number;
+          caption: string | null;
+          alt_text: string | null;
           created_at: string;
         };
         Insert: Omit<Database["public"]["Tables"]["project_images"]["Row"], "id" | "created_at">;
@@ -198,7 +205,17 @@ export interface Database {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      log_activity: {
+        Args: {
+          p_action: string;
+          p_target_table?: string | null;
+          p_target_id?: string | null;
+          p_metadata?: Record<string, unknown> | null;
+        };
+        Returns: string;
+      };
+    };
     Enums: {
       user_role: UserRole;
       inquiry_type: InquiryTypeDb;

@@ -1,11 +1,17 @@
+import Image from "next/image";
+import { MapPin, CalendarDays, Layers } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { FadeUp } from "@/components/ui/FadeUp";
 import { PortfolioCard } from "@/components/portfolio/PortfolioCard";
 import { getFeaturedProjects } from "@/lib/mock/portfolio";
 
+// 대표 시공사례 1건을 큰 실사진과 함께 강조하고, 나머지는 아래 그리드로 보여준다.
+// 화재복구가 아닌 실제 시공실적 데이터(src/lib/mock/portfolio.ts)를 그대로 사용한다.
 export function FeaturedPortfolio() {
-  const projects = getFeaturedProjects(6);
+  const [lead, ...rest] = getFeaturedProjects(6);
+  if (!lead) return null;
 
   return (
     <section className="bg-slate-50 py-16 sm:py-20">
@@ -20,11 +26,70 @@ export function FeaturedPortfolio() {
             전체 시공실적 보기
           </Button>
         </div>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <PortfolioCard key={project.id} project={project} />
-          ))}
-        </div>
+
+        <FadeUp className="mt-10">
+          <a
+            href={`/portfolio/${lead.slug}`}
+            className="group grid overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-lg md:grid-cols-2"
+          >
+            <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-auto">
+              {lead.thumbnail ? (
+                <Image
+                  src={lead.thumbnail}
+                  alt={lead.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                />
+              ) : (
+                <div className="h-full w-full bg-slate-100" />
+              )}
+            </div>
+            <div className="flex flex-col justify-center p-6 sm:p-8">
+              <p className="text-xs font-semibold uppercase tracking-wide text-orange-600">
+                대표 시공사례
+              </p>
+              <h3 className="mt-2 text-xl font-extrabold text-slate-900 sm:text-2xl">
+                {lead.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-slate-600">{lead.description}</p>
+
+              <dl className="mt-6 grid grid-cols-1 gap-3 border-t border-slate-100 pt-5 text-sm sm:grid-cols-3">
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 shrink-0 text-orange-600" aria-hidden="true" />
+                  <div>
+                    <dt className="text-xs text-slate-400">지역</dt>
+                    <dd className="font-semibold text-slate-800">{lead.region}</dd>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CalendarDays className="h-4 w-4 shrink-0 text-orange-600" aria-hidden="true" />
+                  <div>
+                    <dt className="text-xs text-slate-400">공사기간</dt>
+                    <dd className="font-semibold text-slate-800">{lead.period}</dd>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Layers className="h-4 w-4 shrink-0 text-orange-600" aria-hidden="true" />
+                  <div>
+                    <dt className="text-xs text-slate-400">공사내용</dt>
+                    <dd className="font-semibold text-slate-800">{lead.scope.join(", ")}</dd>
+                  </div>
+                </div>
+              </dl>
+            </div>
+          </a>
+        </FadeUp>
+
+        {rest.length > 0 && (
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {rest.map((project, i) => (
+              <FadeUp key={project.id} delay={i * 80}>
+                <PortfolioCard project={project} />
+              </FadeUp>
+            ))}
+          </div>
+        )}
       </Container>
     </section>
   );

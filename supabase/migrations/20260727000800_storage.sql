@@ -15,14 +15,17 @@ on conflict (id) do nothing;
 -- ---------------------------------------------------------------------------
 -- inquiry-files: 공개 방문자는 업로드(INSERT)만 가능, 조회/삭제는 counselor 이상만.
 -- ---------------------------------------------------------------------------
+drop policy if exists "inquiry_files_bucket_insert_public" on storage.objects;
 create policy "inquiry_files_bucket_insert_public"
 on storage.objects for insert
 with check (bucket_id = 'inquiry-files');
 
+drop policy if exists "inquiry_files_bucket_select_staff" on storage.objects;
 create policy "inquiry_files_bucket_select_staff"
 on storage.objects for select
 using (bucket_id = 'inquiry-files' and public.is_counselor_or_above());
 
+drop policy if exists "inquiry_files_bucket_delete_staff" on storage.objects;
 create policy "inquiry_files_bucket_delete_staff"
 on storage.objects for delete
 using (bucket_id = 'inquiry-files' and public.is_counselor_or_above());
@@ -30,19 +33,23 @@ using (bucket_id = 'inquiry-files' and public.is_counselor_or_above());
 -- ---------------------------------------------------------------------------
 -- project-images: 누구나 조회 가능(공개 버킷), 쓰기는 editor 이상만.
 -- ---------------------------------------------------------------------------
+drop policy if exists "project_images_bucket_select_public" on storage.objects;
 create policy "project_images_bucket_select_public"
 on storage.objects for select
 using (bucket_id = 'project-images');
 
+drop policy if exists "project_images_bucket_insert_editor" on storage.objects;
 create policy "project_images_bucket_insert_editor"
 on storage.objects for insert
 with check (bucket_id = 'project-images' and public.is_editor_or_above());
 
+drop policy if exists "project_images_bucket_update_editor" on storage.objects;
 create policy "project_images_bucket_update_editor"
 on storage.objects for update
 using (bucket_id = 'project-images' and public.is_editor_or_above())
 with check (bucket_id = 'project-images' and public.is_editor_or_above());
 
+drop policy if exists "project_images_bucket_delete_editor" on storage.objects;
 create policy "project_images_bucket_delete_editor"
 on storage.objects for delete
 using (bucket_id = 'project-images' and public.is_editor_or_above());
@@ -50,19 +57,23 @@ using (bucket_id = 'project-images' and public.is_editor_or_above());
 -- ---------------------------------------------------------------------------
 -- post-images: 누구나 조회 가능(공개 버킷), 쓰기는 editor 이상만.
 -- ---------------------------------------------------------------------------
+drop policy if exists "post_images_bucket_select_public" on storage.objects;
 create policy "post_images_bucket_select_public"
 on storage.objects for select
 using (bucket_id = 'post-images');
 
+drop policy if exists "post_images_bucket_insert_editor" on storage.objects;
 create policy "post_images_bucket_insert_editor"
 on storage.objects for insert
 with check (bucket_id = 'post-images' and public.is_editor_or_above());
 
+drop policy if exists "post_images_bucket_update_editor" on storage.objects;
 create policy "post_images_bucket_update_editor"
 on storage.objects for update
 using (bucket_id = 'post-images' and public.is_editor_or_above())
 with check (bucket_id = 'post-images' and public.is_editor_or_above());
 
+drop policy if exists "post_images_bucket_delete_editor" on storage.objects;
 create policy "post_images_bucket_delete_editor"
 on storage.objects for delete
 using (bucket_id = 'post-images' and public.is_editor_or_above());

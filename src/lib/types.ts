@@ -94,7 +94,11 @@ export interface PortfolioImageSet {
   during?: string;
   after?: string;
   // 3단계(전/중/후) 구분이 없는 실제 시공실적 사진들. 있으면 BeforeAfter가 단순 갤러리로 렌더링한다.
-  gallery?: { src: string; isRender?: boolean }[];
+  // caption: 갤러리 사진별 단계 설명(예: "STEP 1 · 화재 직후"). isAiExample: true면 실제 시공사진이
+  // 아니라 화재복구 절차 이해를 돕기 위한 AI 생성 예시 이미지임을 뱃지로 표시한다.
+  // src가 빈 문자열이면 아직 이미지 파일이 없다는 뜻이며 PlaceholderImage로 대체 표시된다
+  // (자리만 먼저 만들고, 실제 파일이 준비되면 경로만 채우면 되는 구조).
+  gallery?: { src: string; isRender?: boolean; isAiExample?: boolean; caption?: string }[];
 }
 
 export interface PortfolioProject {

@@ -25,20 +25,40 @@ export function BeforeAfter({ images }: { images: PortfolioImageSet }) {
         <p className="mb-4 text-sm font-bold text-slate-900 sm:mb-5">시공사진</p>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {images.gallery.map((photo, index) => (
-            <div key={photo.src} className="relative overflow-hidden rounded-xl shadow-sm">
+            <div
+              key={`${photo.src || "slot"}-${index}`}
+              className="relative overflow-hidden rounded-xl shadow-sm"
+            >
               <div className="relative aspect-[4/3] w-full">
-                <Image
-                  src={photo.src}
-                  alt={`시공사진 ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                />
+                {photo.src ? (
+                  <Image
+                    src={photo.src}
+                    alt={photo.caption ?? `시공사진 ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  />
+                ) : (
+                  <PlaceholderImage
+                    label={photo.isAiExample ? "AI 생성 이미지 준비 중" : "이미지 준비 중"}
+                    className="h-full w-full"
+                  />
+                )}
               </div>
               {photo.isRender && (
                 <span className="absolute left-2 top-2">
                   <Badge tone="orange">3D 렌더링 (실제 시공사진 아님)</Badge>
                 </span>
+              )}
+              {photo.isAiExample && (
+                <span className="absolute left-2 top-2">
+                  <Badge tone="violet">AI 생성 예시 이미지</Badge>
+                </span>
+              )}
+              {photo.caption && (
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/80 to-transparent px-3 py-2">
+                  <p className="text-xs font-semibold text-white">{photo.caption}</p>
+                </div>
               )}
             </div>
           ))}

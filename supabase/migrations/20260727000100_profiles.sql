@@ -3,13 +3,21 @@
 -- 관리자/스태프 계정을 위한 auth.users 확장 테이블과, 이후 모든 마이그레이션의
 -- RLS 정책이 공통으로 사용하는 역할 판별 함수(is_staff, is_admin_or_above 등)를 정의한다.
 -- 역할 계층: super_admin > admin > counselor(상담 전담) / editor(콘텐츠 전담)
+--
+-- 이 파일은 재실행해도 안전하도록(idempotent) 작성되어 있다 — 이미 만들어진
+-- 타입/테이블/트리거/정책은 건너뛰고 아직 없는 부분만 만든다.
 -- ============================================================================
 
 create extension if not exists "pgcrypto";
 
-create type public.user_role as enum ('super_admin', 'admin', 'counselor', 'editor');
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'user_role') then
+    create type public.user_role as enum ('super_admin', 'admin', 'counselor', 'editor');
+  end if;
+end $$;
 
-create table public.profiles (
+create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   email text not null,
   full_name text,
@@ -35,6 +43,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_profiles_set_updated_at on public.profiles;
 create trigger trg_profiles_set_updated_at
 before update on public.profiles
 for each row execute function public.set_updated_at();
@@ -61,6 +70,7 @@ begin
 end;
 $$;
 
+drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
 after insert on auth.users
 for each row execute function public.handle_new_user();
@@ -150,6 +160,7 @@ as $$
 $$;
 
 -- guard_profile_role_change()가 is_super_admin()을 참조하므로 함수 정의 이후에 트리거 등록
+drop trigger if exists trg_guard_profile_role_change on public.profiles;
 create trigger trg_guard_profile_role_change
 before update on public.profiles
 for each row execute function public.guard_profile_role_change();
@@ -159,15 +170,18 @@ for each row execute function public.guard_profile_role_change();
 -- ---------------------------------------------------------------------------
 alter table public.profiles enable row level security;
 
+drop policy if exists "profiles_select_self_or_admin" on public.profiles;
 create policy "profiles_select_self_or_admin"
 on public.profiles for select
 using (id = auth.uid() or public.is_admin_or_above());
 
+drop policy if exists "profiles_update_self_or_admin" on public.profiles;
 create policy "profiles_update_self_or_admin"
 on public.profiles for update
 using (id = auth.uid() or public.is_admin_or_above())
 with check (id = auth.uid() or public.is_admin_or_above());
 
+drop policy if exists "profiles_delete_super_admin" on public.profiles;
 create policy "profiles_delete_super_admin"
 on public.profiles for delete
 using (public.is_super_admin());

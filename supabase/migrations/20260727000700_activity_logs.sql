@@ -3,7 +3,7 @@
 -- 관리자/스태프의 주요 조작(상담 상태 변경, 콘텐츠 작성 등)을 기록하는 감사 로그.
 -- ============================================================================
 
-create table public.activity_logs (
+create table if not exists public.activity_logs (
   id uuid primary key default gen_random_uuid(),
   actor_id uuid references public.profiles (id),
   action text not null,
@@ -44,10 +44,12 @@ $$;
 -- ---------------------------------------------------------------------------
 alter table public.activity_logs enable row level security;
 
+drop policy if exists "activity_logs_select_admin" on public.activity_logs;
 create policy "activity_logs_select_admin"
 on public.activity_logs for select
 using (public.is_admin_or_above());
 
+drop policy if exists "activity_logs_insert_staff" on public.activity_logs;
 create policy "activity_logs_insert_staff"
 on public.activity_logs for insert
 with check (public.is_staff());

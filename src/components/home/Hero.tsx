@@ -1,71 +1,94 @@
-import { PhoneCall, ShieldCheck } from "lucide-react";
+import { PhoneCall, MessageCircle, ShieldCheck, BadgeCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { FireRecoveryIllustration } from "@/components/ui/FireRecoveryIllustration";
-import { COMPANY, TEL_HREF } from "@/lib/constants";
+import { HeroGallery, type HeroGallerySlide } from "@/components/home/HeroGallery";
+import { TrustBadgeStrip } from "@/components/home/TrustBadgeStrip";
+import { COMPANY, TEL_HREF, KAKAO_HREF } from "@/lib/constants";
+import { getFeaturedProjects } from "@/lib/mock/portfolio";
+
+// Hero 우측 갤러리는 지명원에 실제로 수록된 시공사진(대표 시공실적)을 사용한다.
+// 화재복구 자체 시공사례는 아직 없으므로(지명원 상 실적 없음), "화재 피해 전/후"로
+// 오인되지 않도록 캡션에는 항상 실제 공사 내용만 정확히 표기한다.
+function getHeroSlides(): HeroGallerySlide[] {
+  return getFeaturedProjects(6).map((p) => ({
+    src: p.thumbnail ?? "",
+    caption: `${p.title} · ${p.period}`,
+  }));
+}
 
 export function Hero() {
+  const slides = getHeroSlides().filter((s) => s.src);
+
   return (
     <section className="border-b border-slate-200 bg-slate-900 text-white">
-      <Container className="grid gap-10 py-16 sm:py-20 md:grid-cols-2 md:items-center md:py-24">
+      <Container className="grid gap-10 py-14 sm:py-20 md:grid-cols-2 md:items-center md:py-24">
         <div>
           <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-slate-200">
             <ShieldCheck className="h-4 w-4" aria-hidden="true" />
             {COMPANY.nameKo} 화재복구 전문
           </p>
+
           <h1 className="text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
             화재 발생부터
             <br />
             완전한 복구까지
           </h1>
-          <p className="mt-5 max-w-lg text-base text-slate-300 sm:text-lg">
+
+          <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-orange-300 sm:text-base">
+            <li className="flex items-center gap-1.5">
+              <BadgeCheck className="h-4 w-4" aria-hidden="true" />
+              24시간 긴급출동
+            </li>
+            <li className="flex items-center gap-1.5">
+              <BadgeCheck className="h-4 w-4" aria-hidden="true" />
+              보험사 협업
+            </li>
+            <li className="flex items-center gap-1.5">
+              <BadgeCheck className="h-4 w-4" aria-hidden="true" />
+              무료 현장조사
+            </li>
+          </ul>
+
+          <p className="mt-4 max-w-lg text-base text-slate-300 sm:text-lg">
             현장조사부터 준공까지, 화재복구 전공정을 한 곳에서 통합 관리합니다.
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Button href="/contact" size="lg">
               긴급상담 신청
             </Button>
             <Button
-              href="/fire-cases"
-              variant="outline"
+              href={TEL_HREF}
               size="lg"
+              variant="outline"
               className="!border-white/30 !text-white hover:!bg-white/10"
             >
-              복구사례 보기
+              <PhoneCall className="h-4 w-4" aria-hidden="true" />
+              전화 즉시연결
             </Button>
             <Button
-              href={TEL_HREF}
-              variant="ghost"
+              href={KAKAO_HREF}
               size="lg"
-              className="hidden !text-white hover:!bg-white/10 md:inline-flex"
+              className="!bg-[#FEE500] !text-[#191600] hover:!bg-[#f5dc00]"
             >
-              <PhoneCall className="h-4 w-4" aria-hidden="true" />
-              {COMPANY.tel}
+              <MessageCircle className="h-4 w-4" aria-hidden="true" />
+              카카오톡 상담
             </Button>
           </div>
+          <Button
+            href="/fire-cases"
+            variant="ghost"
+            size="md"
+            className="mt-3 !text-slate-300 hover:!bg-white/10"
+          >
+            복구사례 보기 →
+          </Button>
         </div>
 
-        <div className="flex flex-col gap-4 sm:gap-5">
-          <FireRecoveryIllustration className="h-40 w-full sm:h-48" />
-          <div className="grid grid-cols-2 gap-4 sm:gap-5">
-            {[
-              { label: "전공정 통합관리", desc: "조사부터 준공까지 한 번에" },
-              { label: "손해사정사 협업", desc: "보험 처리 지원" },
-              { label: "소방·전기 협업", desc: "안전 기준 준수 복구" },
-              { label: "주택~공장 대응", desc: "규모별 맞춤 대응" },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="rounded-lg border border-white/10 bg-white/5 p-4 sm:p-5"
-              >
-                <p className="text-sm font-bold text-white sm:text-base">{item.label}</p>
-                <p className="mt-1 text-xs text-slate-400 sm:text-sm">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <HeroGallery slides={slides} />
       </Container>
+
+      <TrustBadgeStrip />
     </section>
   );
 }

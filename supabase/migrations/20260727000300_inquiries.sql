@@ -4,11 +4,20 @@
 -- 공개 방문자는 INSERT만 가능하고 SELECT는 불가하다(자기 접수 조회 UI 없음, 상담번호로만 확인 가능).
 -- ============================================================================
 
-create type public.inquiry_type as enum ('긴급화재복구', '일반상담', '현장방문', '협력문의');
-create type public.insurance_status as enum ('yes', 'no', 'unknown');
-create type public.inquiry_status as enum ('new', 'in_progress', 'visited', 'quoted', 'completed', 'closed');
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'inquiry_type') then
+    create type public.inquiry_type as enum ('긴급화재복구', '일반상담', '현장방문', '협력문의');
+  end if;
+  if not exists (select 1 from pg_type where typname = 'insurance_status') then
+    create type public.insurance_status as enum ('yes', 'no', 'unknown');
+  end if;
+  if not exists (select 1 from pg_type where typname = 'inquiry_status') then
+    create type public.inquiry_status as enum ('new', 'in_progress', 'visited', 'quoted', 'completed', 'closed');
+  end if;
+end $$;
 
-create table public.inquiries (
+create table if not exists public.inquiries (
   id uuid primary key default gen_random_uuid(),
   inquiry_no text unique,
   inquiry_type public.inquiry_type not null,
@@ -35,6 +44,7 @@ comment on table public.inquiries is
 comment on column public.inquiries.inquiry_no is 'FIRE-YYYYMMDD-0001 형식, BEFORE INSERT 트리거로 자동 채번.';
 comment on column public.inquiries.building_type is 'BuildingType(TS) 값을 그대로 저장. 목록이 계속 넓어질 수 있어 enum이 아닌 text.';
 
+drop trigger if exists trg_inquiries_set_updated_at on public.inquiries;
 create trigger trg_inquiries_set_updated_at
 before update on public.inquiries
 for each row execute function public.set_updated_at();
@@ -56,6 +66,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_set_inquiry_no on public.inquiries;
 create trigger trg_set_inquiry_no
 before insert on public.inquiries
 for each row execute function public.set_inquiry_no();
@@ -65,10 +76,12 @@ for each row execute function public.set_inquiry_no();
 -- ---------------------------------------------------------------------------
 alter table public.inquiries enable row level security;
 
+drop policy if exists "inquiries_insert_public" on public.inquiries;
 create policy "inquiries_insert_public"
 on public.inquiries for insert
 with check (true);
 
+drop policy if exists "inquiries_all_staff" on public.inquiries;
 create policy "inquiries_all_staff"
 on public.inquiries for all
 using (public.is_counselor_or_above())

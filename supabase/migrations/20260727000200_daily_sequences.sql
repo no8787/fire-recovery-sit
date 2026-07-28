@@ -4,7 +4,7 @@
 -- INSERT ... ON CONFLICT ... DO UPDATE ... RETURNING 단일 원자적 SQL로 동시접수 중복을 방지한다.
 -- ============================================================================
 
-create table public.daily_sequences (
+create table if not exists public.daily_sequences (
   seq_date date primary key,
   last_value integer not null default 0
 );

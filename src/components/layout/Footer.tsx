@@ -66,10 +66,12 @@ export function Footer() {
       </Container>
 
       <div className="border-t border-slate-800">
-        <Container className="flex flex-col gap-2 py-5 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <Container className="space-y-1.5 py-5 text-xs text-slate-500">
           <p>
-            대표 {COMPANY.ceo} · 사업분야 {COMPANY.businessScope.join(" · ")}
+            대표 {COMPANY.ceo} · 사업자등록번호 {COMPANY.businessRegistrationNo} · 건설업 등록번호{" "}
+            {COMPANY.constructionLicenseNo}
           </p>
+          <p>사업분야 {COMPANY.businessScope.join(" · ")}</p>
           <p>
             &copy; {new Date().getFullYear()} {COMPANY.nameKo}. All rights reserved.
           </p>

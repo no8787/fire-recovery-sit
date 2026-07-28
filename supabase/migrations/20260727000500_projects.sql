@@ -6,9 +6,14 @@
 -- (kind, slug) 조합으로 유일성을 보장한다.
 -- ============================================================================
 
-create type public.project_kind as enum ('construction', 'fire_case');
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'project_kind') then
+    create type public.project_kind as enum ('construction', 'fire_case');
+  end if;
+end $$;
 
-create table public.project_categories (
+create table if not exists public.project_categories (
   id uuid primary key default gen_random_uuid(),
   kind public.project_kind not null,
   slug text not null,
@@ -22,7 +27,7 @@ create table public.project_categories (
 comment on table public.project_categories is
   'kind=construction: 시공실적 8개 분류(공공기관/병원/학교/복지시설/LH/도시공사/군부대/상업시설). kind=fire_case: 화재복구 사례 분류(현재 데이터 없음, 분류만 준비).';
 
-create table public.projects (
+create table if not exists public.projects (
   id uuid primary key default gen_random_uuid(),
   kind public.project_kind not null default 'construction',
   slug text unique not null,
@@ -47,7 +52,7 @@ comment on table public.projects is
   '/portfolio(시공실적, kind=construction)와 /fire-cases(화재복구 사례, kind=fire_case) 공통 데이터 테이블. src/lib/mock/portfolio.ts, src/lib/data/construction-records.ts, src/lib/data/fire-recovery-cases.ts에 대응.';
 comment on column public.projects.project_nature is '기존 TS의 damageType 필드에 대응. 시공실적은 실내인테리어/리모델링/설계 제안 등, 화재복구 사례는 화재/그을음·냄새 등.';
 
-create table public.project_images (
+create table if not exists public.project_images (
   id uuid primary key default gen_random_uuid(),
   project_id uuid not null references public.projects (id) on delete cascade,
   storage_path text not null,
@@ -63,6 +68,7 @@ comment on table public.project_images is
 comment on column public.project_images.storage_path is
   'Sprint 2-1 시드에서는 기존 public/images/construction/** 경로 문자열을 그대로 저장(프론트가 계속 정적 파일을 서빙). project-images Storage 버킷으로 실제 업로드/전환하는 작업은 Sprint 2-2 TODO.';
 
+drop trigger if exists trg_projects_set_updated_at on public.projects;
 create trigger trg_projects_set_updated_at
 before update on public.projects
 for each row execute function public.set_updated_at();
@@ -88,6 +94,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_guard_project_kind_matches_category on public.projects;
 create trigger trg_guard_project_kind_matches_category
 before insert or update on public.projects
 for each row execute function public.guard_project_kind_matches_category();
@@ -97,10 +104,12 @@ for each row execute function public.guard_project_kind_matches_category();
 -- ---------------------------------------------------------------------------
 alter table public.project_categories enable row level security;
 
+drop policy if exists "project_categories_select_public" on public.project_categories;
 create policy "project_categories_select_public"
 on public.project_categories for select
 using (true);
 
+drop policy if exists "project_categories_write_editor" on public.project_categories;
 create policy "project_categories_write_editor"
 on public.project_categories for all
 using (public.is_editor_or_above())
@@ -108,10 +117,12 @@ with check (public.is_editor_or_above());
 
 alter table public.projects enable row level security;
 
+drop policy if exists "projects_select_published_or_editor" on public.projects;
 create policy "projects_select_published_or_editor"
 on public.projects for select
 using (status = 'published' or public.is_editor_or_above());
 
+drop policy if exists "projects_write_editor" on public.projects;
 create policy "projects_write_editor"
 on public.projects for all
 using (public.is_editor_or_above())
@@ -119,6 +130,7 @@ with check (public.is_editor_or_above());
 
 alter table public.project_images enable row level security;
 
+drop policy if exists "project_images_select_published_or_editor" on public.project_images;
 create policy "project_images_select_published_or_editor"
 on public.project_images for select
 using (
@@ -129,6 +141,7 @@ using (
   )
 );
 
+drop policy if exists "project_images_write_editor" on public.project_images;
 create policy "project_images_write_editor"
 on public.project_images for all
 using (public.is_editor_or_above())

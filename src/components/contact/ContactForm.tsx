@@ -291,6 +291,16 @@ export function ContactForm() {
         {fileError && <p className={errorClass}>{fileError}</p>}
       </div>
 
+      <div className="rounded-md border border-slate-200 bg-slate-50 p-3.5 text-xs leading-relaxed text-slate-600">
+        <p className="font-semibold text-slate-800">개인정보 수집·이용 안내</p>
+        <ul className="mt-1.5 list-disc space-y-0.5 pl-4">
+          <li>수집 목적: 화재복구 상담 접수 및 담당자 대응, 현장방문 일정 조율, 견적 협의</li>
+          <li>수집 항목: 이름, 연락처, 현장 주소, 건물 유형, 피해 내용, 보험 가입 여부 등(선택 항목 포함)</li>
+          <li>보유 및 이용 기간: 상담 처리 목적 달성 시까지 보유 후 관련 법령에 따라 파기</li>
+          <li>동의를 거부할 권리가 있으며, 동의 거부 시 상담 접수가 제한될 수 있습니다.</li>
+        </ul>
+      </div>
+
       <div>
         <label className="flex items-start gap-2.5 text-sm text-slate-700">
           <input
@@ -299,7 +309,7 @@ export function ContactForm() {
             {...register("privacyAgreed")}
           />
           <span>
-            개인정보 수집·이용에 동의합니다. (필수) — 자세한 내용은{" "}
+            위 개인정보 수집·이용에 동의합니다. (필수) — 자세한 내용은{" "}
             <a href="/privacy" className="underline hover:text-orange-600">
               개인정보처리방침
             </a>
