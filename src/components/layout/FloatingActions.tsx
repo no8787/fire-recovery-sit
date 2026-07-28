@@ -48,6 +48,8 @@ export function FloatingActions() {
         </a>
         <a
           href={KAKAO_HREF}
+          target="_blank"
+          rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 bg-[#FEE500] px-4 py-3 text-sm font-bold text-[#191600] transition-colors hover:bg-[#f5dc00]"
         >
           <MessageCircle className="h-4 w-4" aria-hidden="true" />

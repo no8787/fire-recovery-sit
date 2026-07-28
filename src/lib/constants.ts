@@ -33,11 +33,14 @@ export const COMPANY = {
 
 export const TEL_HREF = `tel:${COMPANY.tel.replace(/-/g, "")}`;
 
-// 카카오톡 채널 1:1 상담 링크. NEXT_PUBLIC_KAKAO_CHAT_URL(.env.local)로 관리한다.
-// 값이 비면 Hero/Footer/MobileCTA/FloatingActions의 카카오 버튼이 전화 상담으로
-// 자동 대체되어(깨진 링크 방지) 안전하게 동작한다.
-export const KAKAO_CHANNEL_URL = process.env.NEXT_PUBLIC_KAKAO_CHAT_URL ?? "";
-export const KAKAO_HREF = KAKAO_CHANNEL_URL || TEL_HREF;
+// 카카오톡 채널 1:1 "채팅" 링크(채널 홈이 아님). 운영자 확인:
+// https://pf.kakao.com/_bxkJxnX/chat
+// NEXT_PUBLIC_KAKAO_CHAT_URL(.env.local / Vercel 환경변수)로 값을 덮어쓸 수 있지만,
+// 환경변수가 비어 있어도 전화번호(tel:)나 빈 값/#으로 새지 않도록 실제 채팅 URL을
+// 코드 기본값으로 고정한다. 모든 카카오 버튼은 반드시 이 상수(KAKAO_HREF) 하나만 사용한다.
+const KAKAO_CHAT_URL_FALLBACK = "https://pf.kakao.com/_bxkJxnX/chat";
+export const KAKAO_CHANNEL_URL = process.env.NEXT_PUBLIC_KAKAO_CHAT_URL || KAKAO_CHAT_URL_FALLBACK;
+export const KAKAO_HREF = KAKAO_CHANNEL_URL;
 
 // 신뢰 지표 섹션에 쓰는 수치. 지명원(2025-10-14)에서 확인 가능한 실제 값만 사용합니다.
 // (화재복구 자체 시공사례가 아직 없어 "복구현장 수"·"고객만족도" 같은 미확인 수치는 넣지 않았습니다.)

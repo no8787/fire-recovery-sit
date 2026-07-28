@@ -68,6 +68,8 @@ export function Hero() {
             </Button>
             <Button
               href={KAKAO_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
               size="lg"
               className="!bg-[#FEE500] !text-[#191600] hover:!bg-[#f5dc00]"
             >

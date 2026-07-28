@@ -23,6 +23,8 @@ const OPTIONS = [
     title: "카카오톡 상담",
     description: "채팅으로 바로 문의하기",
     className: "bg-[#FEE500] text-[#191600] hover:bg-[#f5dc00]",
+    target: "_blank",
+    rel: "noopener noreferrer",
   },
 ];
 
@@ -40,10 +42,12 @@ export function ContactCTA() {
         </div>
 
         <div className="grid w-full max-w-2xl gap-3 sm:grid-cols-3">
-          {OPTIONS.map(({ href, icon: OptionIcon, title, description, className }) => (
+          {OPTIONS.map(({ href, icon: OptionIcon, title, description, className, target, rel }) => (
             <a
               key={title}
               href={href}
+              target={target}
+              rel={rel}
               className={`flex flex-col items-center gap-1.5 rounded-xl px-4 py-5 font-semibold shadow-sm transition-colors ${className}`}
             >
               <OptionIcon className="h-5 w-5" aria-hidden="true" />
