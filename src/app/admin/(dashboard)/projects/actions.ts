@@ -216,7 +216,15 @@ export async function deleteProjectAction(formData: FormData) {
 // ---------------------------------------------------------------------------
 // 이미지 업로드/관리
 // ---------------------------------------------------------------------------
-export async function uploadProjectImageAction(formData: FormData) {
+
+export type UploadImageResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
+// 여러 장을 순차 업로드하는 클라이언트 컴포넌트(MultiImageUpload)에서 직접 호출한다.
+// 폼 제출이 아니라 이벤트 핸들러에서 호출하므로 redirect()를 쓰지 않고 결과를
+// 반환값으로 돌려준다 — 파일 하나가 실패해도 나머지 파일 업로드를 계속 진행하기 위함이다.
+export async function uploadProjectImageAction(formData: FormData): Promise<UploadImageResult> {
   const { supabase, user, profile } = await requireEditor();
   const projectId = formData.get("project_id")?.toString() ?? "";
   const file = formData.get("file");
@@ -224,22 +232,22 @@ export async function uploadProjectImageAction(formData: FormData) {
   const caption = formData.get("caption")?.toString().trim() || null;
   const altText = formData.get("alt_text")?.toString().trim() || null;
 
-  if (!projectId) backWithError("/admin/projects", "잘못된 요청입니다.");
+  if (!projectId) return { ok: false, error: "잘못된 요청입니다." };
   if (!(file instanceof File) || file.size === 0) {
-    backWithError(`/admin/projects/${projectId}`, "업로드할 이미지 파일을 선택해 주세요.");
+    return { ok: false, error: "업로드할 이미지 파일이 없습니다." };
   }
 
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
   const mimeExt = ALLOWED_IMAGE_MIME[file.type];
 
   if (!mimeExt || !ALLOWED_EXTENSIONS.has(ext) || mimeExt !== (ext === "jpeg" ? "jpg" : ext)) {
-    backWithError(
-      `/admin/projects/${projectId}`,
-      "jpg, jpeg, png, webp 형식의 이미지만 업로드할 수 있습니다(확장자와 파일 형식이 일치해야 합니다)."
-    );
+    return {
+      ok: false,
+      error: "jpg, jpeg, png, webp 형식만 업로드할 수 있습니다(확장자와 파일 형식이 일치해야 합니다).",
+    };
   }
   if (file.size > MAX_IMAGE_BYTES) {
-    backWithError(`/admin/projects/${projectId}`, "이미지 용량은 5MB 이하만 업로드할 수 있습니다.");
+    return { ok: false, error: "이미지 용량은 5MB 이하만 업로드할 수 있습니다." };
   }
 
   const safeExt = mimeExt;
@@ -250,7 +258,7 @@ export async function uploadProjectImageAction(formData: FormData) {
     .upload(storagePath, file, { contentType: file.type, upsert: false });
 
   if (uploadError) {
-    backWithError(`/admin/projects/${projectId}`, `업로드 실패: ${uploadError.message}`);
+    return { ok: false, error: `업로드 실패: ${uploadError.message}` };
   }
 
   const { count } = await supabase
@@ -271,7 +279,7 @@ export async function uploadProjectImageAction(formData: FormData) {
   if (insertError) {
     // DB 저장 실패 시 방금 올린 Storage 파일을 정리해 고아 파일을 남기지 않는다.
     await supabase.storage.from("project-images").remove([storagePath]);
-    backWithError(`/admin/projects/${projectId}`, `이미지 정보 저장 실패: ${insertError.message}`);
+    return { ok: false, error: `이미지 정보 저장 실패: ${insertError.message}` };
   }
 
   await supabase.rpc("log_activity", {
@@ -283,7 +291,7 @@ export async function uploadProjectImageAction(formData: FormData) {
 
   revalidatePublic();
   revalidatePath(`/admin/projects/${projectId}`);
-  redirect(`/admin/projects/${projectId}`);
+  return { ok: true };
 }
 
 export async function deleteProjectImageAction(formData: FormData) {

@@ -4,10 +4,10 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ConfirmSubmitButton } from "@/components/admin/ConfirmSubmitButton";
+import { MultiImageUpload } from "@/components/admin/MultiImageUpload";
 import { requireEditor } from "@/lib/supabase/admin-auth";
 import {
   updateProjectAction,
-  uploadProjectImageAction,
   deleteProjectImageAction,
   setThumbnailAction,
   updateImageSortAction,
@@ -184,46 +184,7 @@ export default async function EditProjectPage({
             jpg/jpeg/png/webp, 5MB 이하만 업로드할 수 있습니다.
           </p>
 
-          <form
-            action={uploadProjectImageAction}
-            encType="multipart/form-data"
-            className="mt-4 grid gap-3 rounded-lg bg-slate-50 p-4 sm:grid-cols-4"
-          >
-            <input type="hidden" name="project_id" value={project.id} />
-            <div className="sm:col-span-4">
-              <label className={labelClass}>파일</label>
-              <input
-                type="file"
-                name="file"
-                accept="image/jpeg,image/png,image/webp"
-                required
-                className="block w-full text-sm"
-              />
-            </div>
-            <div>
-              <label className={labelClass}>단계</label>
-              <select name="stage" className={inputClass}>
-                {STAGE_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="sm:col-span-2">
-              <label className={labelClass}>캡션(선택)</label>
-              <input name="caption" className={inputClass} />
-            </div>
-            <div>
-              <label className={labelClass}>대체텍스트(선택)</label>
-              <input name="alt_text" className={inputClass} />
-            </div>
-            <div className="sm:col-span-4">
-              <Button type="submit" size="md">
-                업로드
-              </Button>
-            </div>
-          </form>
+          <MultiImageUpload projectId={project.id} inputClass={inputClass} labelClass={labelClass} />
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {imagesWithUrl.map((img) => (
@@ -244,21 +205,35 @@ export default async function EditProjectPage({
                   )}
                 </div>
                 <div className="space-y-2 p-3">
-                  <form action={updateImageSortAction} className="flex flex-wrap items-center gap-2">
+                  <form action={updateImageSortAction} className="space-y-2">
                     <input type="hidden" name="image_id" value={img.id} />
                     <input type="hidden" name="project_id" value={project.id} />
-                    <select name="stage" defaultValue={img.stage ?? ""} className={`${inputClass} w-32`}>
-                      {STAGE_OPTIONS.map((o) => (
-                        <option key={o.value} value={o.value}>
-                          {o.label}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <select name="stage" defaultValue={img.stage ?? ""} className={`${inputClass} w-32`}>
+                        {STAGE_OPTIONS.map((o) => (
+                          <option key={o.value} value={o.value}>
+                            {o.label}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        name="sort_order"
+                        type="number"
+                        defaultValue={img.sort_order}
+                        className={`${inputClass} w-16`}
+                      />
+                    </div>
                     <input
-                      name="sort_order"
-                      type="number"
-                      defaultValue={img.sort_order}
-                      className={`${inputClass} w-16`}
+                      name="caption"
+                      defaultValue={img.caption ?? ""}
+                      placeholder="캡션(선택)"
+                      className={`${inputClass} text-xs`}
+                    />
+                    <input
+                      name="alt_text"
+                      defaultValue={img.alt_text ?? ""}
+                      placeholder="대체텍스트(선택)"
+                      className={`${inputClass} text-xs`}
                     />
                     <button
                       type="submit"
