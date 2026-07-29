@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireEditor } from "@/lib/supabase/admin-auth";
+import { resolveUniqueSlug } from "@/lib/supabase/slug-dedupe";
 import type { ProjectKind, ImageStage } from "@/lib/supabase/database.types";
 
 const ALLOWED_IMAGE_MIME: Record<string, string> = {
@@ -46,7 +47,6 @@ export async function createProjectAction(formData: FormData) {
   const status = formData.get("status")?.toString() === "published" ? "published" : "draft";
 
   if (
-    !slug ||
     !title ||
     !categoryId ||
     !region ||
@@ -58,11 +58,13 @@ export async function createProjectAction(formData: FormData) {
     backWithError("/admin/projects/new", "필수 항목을 모두 입력해 주세요.");
   }
 
+  const uniqueSlug = await resolveUniqueSlug(supabase, "projects", slug, title);
+
   const { data, error } = await supabase
     .from("projects")
     .insert({
       kind,
-      slug,
+      slug: uniqueSlug,
       title,
       category_id: categoryId,
       region,
@@ -88,7 +90,7 @@ export async function createProjectAction(formData: FormData) {
     p_action: "project.created",
     p_target_table: "projects",
     p_target_id: data.id,
-    p_metadata: { slug, actor_email: user.email, actor_role: profile.role },
+    p_metadata: { slug: uniqueSlug, actor_email: user.email, actor_role: profile.role },
   });
 
   revalidatePublic();

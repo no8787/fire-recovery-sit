@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireEditor } from "@/lib/supabase/admin-auth";
+import { resolveUniqueSlug } from "@/lib/supabase/slug-dedupe";
 
 function backWithError(path: string, message: string): never {
   redirect(`${path}?error=${encodeURIComponent(message)}`);
@@ -22,14 +23,16 @@ export async function createPostAction(formData: FormData) {
   const content = formData.get("content")?.toString().trim() ?? "";
   const status = formData.get("status")?.toString() === "published" ? "published" : "draft";
 
-  if (!slug || !title || !content) {
-    backWithError("/admin/posts/new", "슬러그, 제목, 본문은 필수입니다.");
+  if (!title || !content) {
+    backWithError("/admin/posts/new", "제목, 본문은 필수입니다.");
   }
+
+  const uniqueSlug = await resolveUniqueSlug(supabase, "posts", slug, title);
 
   const { data, error } = await supabase
     .from("posts")
     .insert({
-      slug,
+      slug: uniqueSlug,
       category,
       title,
       excerpt,
@@ -49,7 +52,7 @@ export async function createPostAction(formData: FormData) {
     p_action: "post.created",
     p_target_table: "posts",
     p_target_id: data.id,
-    p_metadata: { slug, actor_email: user.email, actor_role: profile.role },
+    p_metadata: { slug: uniqueSlug, actor_email: user.email, actor_role: profile.role },
   });
 
   revalidatePublic();

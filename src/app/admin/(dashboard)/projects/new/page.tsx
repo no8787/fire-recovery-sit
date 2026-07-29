@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { TitleSlugFields } from "@/components/admin/TitleSlugFields";
 import { requireEditor } from "@/lib/supabase/admin-auth";
 import { createProjectAction } from "../actions";
 
@@ -45,27 +46,23 @@ export default async function NewProjectPage({
             </select>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div>
-              <label className={labelClass}>슬러그(URL, 영문/숫자/하이픈)</label>
-              <input name="slug" required pattern="[a-z0-9-]+" className={inputClass} />
-            </div>
-            <div>
-              <label className={labelClass}>카테고리</label>
-              <select name="category_id" required className={inputClass}>
-                <option value="">선택해 주세요</option>
-                {(categories ?? []).map((c) => (
-                  <option key={c.id} value={c.id}>
-                    [{c.kind === "construction" ? "시공실적" : "화재복구"}] {c.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <TitleSlugFields
+            titleLabel="제목"
+            slugLabel="슬러그(URL, 영문/숫자/하이픈, 비워두면 제목에서 자동 생성)"
+            labelClass={labelClass}
+            inputClass={inputClass}
+          />
 
           <div>
-            <label className={labelClass}>제목</label>
-            <input name="title" required className={inputClass} />
+            <label className={labelClass}>카테고리</label>
+            <select name="category_id" required className={inputClass}>
+              <option value="">선택해 주세요</option>
+              {(categories ?? []).map((c) => (
+                <option key={c.id} value={c.id}>
+                  [{c.kind === "construction" ? "시공실적" : "화재복구"}] {c.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="grid gap-5 sm:grid-cols-3">

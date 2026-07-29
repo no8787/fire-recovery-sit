@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { TitleSlugFields } from "@/components/admin/TitleSlugFields";
 import { createPostAction } from "../actions";
 
 export const metadata: Metadata = { title: "새 게시글 등록", robots: { index: false, follow: false } };
@@ -28,23 +29,19 @@ export default async function NewPostPage({
         )}
 
         <form action={createPostAction} className="mt-6 space-y-5">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div>
-              <label className={labelClass}>슬러그(URL)</label>
-              <input name="slug" required pattern="[a-z0-9-]+" className={inputClass} />
-            </div>
-            <div>
-              <label className={labelClass}>카테고리</label>
-              <select name="category" defaultValue="guide" className={inputClass}>
-                <option value="guide">화재복구정보</option>
-                <option value="notice">공지사항</option>
-              </select>
-            </div>
-          </div>
+          <TitleSlugFields
+            titleLabel="제목"
+            slugLabel="슬러그(URL, 비워두면 제목에서 자동 생성)"
+            labelClass={labelClass}
+            inputClass={inputClass}
+          />
 
           <div>
-            <label className={labelClass}>제목</label>
-            <input name="title" required className={inputClass} />
+            <label className={labelClass}>카테고리</label>
+            <select name="category" defaultValue="guide" className={inputClass}>
+              <option value="guide">화재복구정보</option>
+              <option value="notice">공지사항</option>
+            </select>
           </div>
 
           <div>
