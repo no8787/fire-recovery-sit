@@ -22,6 +22,7 @@ interface FileItem {
   previewUrl: string;
   caption: string;
   altText: string;
+  stage: string;
   status: FileStatus;
   error?: string;
 }
@@ -42,7 +43,6 @@ export function MultiImageUpload({
   labelClass: string;
 }) {
   const [items, setItems] = useState<FileItem[]>([]);
-  const [stage, setStage] = useState("");
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState({ done: 0, total: 0 });
   const [limitMessage, setLimitMessage] = useState<string | null>(null);
@@ -70,6 +70,7 @@ export function MultiImageUpload({
           previewUrl: URL.createObjectURL(file),
           caption: defaultCaption,
           altText: defaultCaption,
+          stage: "",
           status: "pending" as const,
         };
       })
@@ -85,7 +86,7 @@ export function MultiImageUpload({
     });
   }
 
-  function updateItemField(index: number, field: "caption" | "altText", value: string) {
+  function updateItemField(index: number, field: "caption" | "altText" | "stage", value: string) {
     setItems((prev) => prev.map((it, idx) => (idx === index ? { ...it, [field]: value } : it)));
   }
 
@@ -100,7 +101,7 @@ export function MultiImageUpload({
       const fd = new FormData();
       fd.append("project_id", projectId);
       fd.append("file", items[i].file);
-      fd.append("stage", stage);
+      fd.append("stage", items[i].stage);
       fd.append("caption", items[i].caption);
       fd.append("alt_text", items[i].altText);
 
@@ -124,33 +125,16 @@ export function MultiImageUpload({
 
   return (
     <div className="mt-4 rounded-lg bg-slate-50 p-4">
-      <div className="grid gap-3 sm:grid-cols-4">
-        <div className="sm:col-span-3">
-          <label className={labelClass}>파일 (여러 장 선택 가능, 최대 {MAX_FILES}장)</label>
-          <input
-            type="file"
-            multiple
-            accept="image/jpeg,image/png,image/webp"
-            onChange={handleFileSelect}
-            disabled={uploading}
-            className="block w-full text-sm"
-          />
-        </div>
-        <div>
-          <label className={labelClass}>단계(전체 공통 적용)</label>
-          <select
-            value={stage}
-            onChange={(e) => setStage(e.target.value)}
-            disabled={uploading}
-            className={inputClass}
-          >
-            {STAGE_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div>
+        <label className={labelClass}>파일 (여러 장 선택 가능, 최대 {MAX_FILES}장)</label>
+        <input
+          type="file"
+          multiple
+          accept="image/jpeg,image/png,image/webp"
+          onChange={handleFileSelect}
+          disabled={uploading}
+          className="block w-full text-sm"
+        />
       </div>
 
       {limitMessage && <p className="mt-2 text-xs font-semibold text-red-600">{limitMessage}</p>}
@@ -171,7 +155,23 @@ export function MultiImageUpload({
                   <img src={it.previewUrl} alt={it.file.name} className="h-full w-full object-cover" />
                 </div>
                 <div className="min-w-0 flex-1 space-y-1.5">
-                  <p className="truncate text-xs font-semibold text-slate-700">{it.file.name}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="min-w-0 flex-1 truncate text-xs font-semibold text-slate-700">
+                      {it.file.name}
+                    </p>
+                    <select
+                      value={it.stage}
+                      onChange={(e) => updateItemField(idx, "stage", e.target.value)}
+                      disabled={uploading}
+                      className={`${inputClass} w-32 shrink-0 text-xs`}
+                    >
+                      {STAGE_OPTIONS.map((o) => (
+                        <option key={o.value} value={o.value}>
+                          {o.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   <input
                     value={it.caption}
                     onChange={(e) => updateItemField(idx, "caption", e.target.value)}
