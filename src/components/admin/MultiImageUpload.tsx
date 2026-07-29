@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { uploadProjectImageAction } from "@/app/admin/(dashboard)/projects/actions";
+import { buildDefaultCaption } from "@/lib/image-caption";
 
 const MAX_FILES = 10;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -19,16 +20,24 @@ type FileStatus = "pending" | "uploading" | "success" | "error";
 interface FileItem {
   file: File;
   previewUrl: string;
+  caption: string;
+  altText: string;
   status: FileStatus;
   error?: string;
 }
 
 export function MultiImageUpload({
   projectId,
+  projectTitle,
+  projectRegion,
+  projectNature,
   inputClass,
   labelClass,
 }: {
   projectId: string;
+  projectTitle: string;
+  projectRegion: string;
+  projectNature: string;
   inputClass: string;
   labelClass: string;
 }) {
@@ -52,12 +61,18 @@ export function MultiImageUpload({
     }
 
     const capped = selected.slice(0, MAX_FILES);
+    const project = { title: projectTitle, region: projectRegion, projectNature };
     setItems(
-      capped.map((file) => ({
-        file,
-        previewUrl: URL.createObjectURL(file),
-        status: "pending" as const,
-      }))
+      capped.map((file, idx) => {
+        const defaultCaption = buildDefaultCaption(project, idx, capped.length);
+        return {
+          file,
+          previewUrl: URL.createObjectURL(file),
+          caption: defaultCaption,
+          altText: defaultCaption,
+          status: "pending" as const,
+        };
+      })
     );
     setProgress({ done: 0, total: 0 });
     e.target.value = "";
@@ -68,6 +83,10 @@ export function MultiImageUpload({
       URL.revokeObjectURL(prev[index].previewUrl);
       return prev.filter((_, i) => i !== index);
     });
+  }
+
+  function updateItemField(index: number, field: "caption" | "altText", value: string) {
+    setItems((prev) => prev.map((it, idx) => (idx === index ? { ...it, [field]: value } : it)));
   }
 
   async function handleUploadAll() {
@@ -82,6 +101,8 @@ export function MultiImageUpload({
       fd.append("project_id", projectId);
       fd.append("file", items[i].file);
       fd.append("stage", stage);
+      fd.append("caption", items[i].caption);
+      fd.append("alt_text", items[i].altText);
 
       const result = await uploadProjectImageAction(fd);
 
@@ -136,44 +157,66 @@ export function MultiImageUpload({
 
       {items.length > 0 && (
         <>
-          <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-5">
+          <p className="mt-4 text-xs text-slate-500">
+            캡션·대체텍스트는 프로젝트 정보로 자동 채워집니다. 필요하면 업로드 전에 직접 수정하세요.
+          </p>
+          <div className="mt-2 space-y-2">
             {items.map((it, idx) => (
-              <div key={idx} className="relative overflow-hidden rounded-md border border-slate-200 bg-white">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={it.previewUrl}
-                  alt={it.file.name}
-                  className="aspect-square w-full object-cover"
-                />
-                {!uploading && it.status === "pending" && (
-                  <button
-                    type="button"
-                    onClick={() => removeItem(idx)}
-                    aria-label="선택 취소"
-                    className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-slate-900/70 text-xs font-bold text-white hover:bg-slate-900"
-                  >
-                    ×
-                  </button>
-                )}
-                {it.status === "uploading" && (
-                  <span className="absolute inset-x-0 bottom-0 bg-slate-900/80 px-1.5 py-1 text-center text-[10px] font-semibold text-white">
-                    업로드 중...
-                  </span>
-                )}
-                {it.status === "success" && (
-                  <span className="absolute inset-x-0 bottom-0 bg-emerald-600/90 px-1.5 py-1 text-center text-[10px] font-semibold text-white">
-                    완료
-                  </span>
-                )}
-                {it.status === "error" && (
-                  <span
-                    className="absolute inset-x-0 bottom-0 truncate bg-red-600/90 px-1.5 py-1 text-center text-[10px] font-semibold text-white"
-                    title={it.error}
-                  >
-                    실패
-                  </span>
-                )}
-                <p className="truncate px-1.5 py-1 text-[10px] text-slate-500">{it.file.name}</p>
+              <div
+                key={idx}
+                className="flex gap-3 rounded-md border border-slate-200 bg-white p-2.5"
+              >
+                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={it.previewUrl} alt={it.file.name} className="h-full w-full object-cover" />
+                </div>
+                <div className="min-w-0 flex-1 space-y-1.5">
+                  <p className="truncate text-xs font-semibold text-slate-700">{it.file.name}</p>
+                  <input
+                    value={it.caption}
+                    onChange={(e) => updateItemField(idx, "caption", e.target.value)}
+                    placeholder="캡션"
+                    disabled={uploading}
+                    className={`${inputClass} text-xs`}
+                  />
+                  <input
+                    value={it.altText}
+                    onChange={(e) => updateItemField(idx, "altText", e.target.value)}
+                    placeholder="대체텍스트"
+                    disabled={uploading}
+                    className={`${inputClass} text-xs`}
+                  />
+                </div>
+                <div className="flex shrink-0 flex-col items-end justify-between">
+                  {!uploading && it.status === "pending" && (
+                    <button
+                      type="button"
+                      onClick={() => removeItem(idx)}
+                      aria-label="선택 취소"
+                      className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-500 hover:bg-slate-200"
+                    >
+                      ×
+                    </button>
+                  )}
+                  {it.status === "uploading" && (
+                    <span className="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-semibold text-white">
+                      업로드 중
+                    </span>
+                  )}
+                  {it.status === "success" && (
+                    <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-semibold text-white">
+                      완료
+                    </span>
+                  )}
+                  {it.status === "error" && (
+                    <span
+                      className="rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-semibold text-white"
+                      title={it.error}
+                    >
+                      실패
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -204,7 +247,7 @@ export function MultiImageUpload({
 
           {allDone && failedItems.length === 0 && (
             <p className="mt-3 text-xs font-semibold text-emerald-600">
-              전체 {progress.total}장 업로드 완료. 캡션/대체텍스트는 아래 이미지 목록에서 각각 수정할 수 있습니다.
+              전체 {progress.total}장 업로드 완료. 캡션/대체텍스트는 아래 이미지 목록에서도 다시 수정할 수 있습니다.
             </p>
           )}
         </>

@@ -184,7 +184,14 @@ export default async function EditProjectPage({
             jpg/jpeg/png/webp, 5MB 이하만 업로드할 수 있습니다.
           </p>
 
-          <MultiImageUpload projectId={project.id} inputClass={inputClass} labelClass={labelClass} />
+          <MultiImageUpload
+            projectId={project.id}
+            projectTitle={project.title}
+            projectRegion={project.region}
+            projectNature={project.project_nature}
+            inputClass={inputClass}
+            labelClass={labelClass}
+          />
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {imagesWithUrl.map((img) => (
