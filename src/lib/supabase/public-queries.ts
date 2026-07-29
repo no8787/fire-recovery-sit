@@ -1,5 +1,5 @@
 import "server-only";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public-client";
 import type {
   PortfolioProject,
   PortfolioCategory,
@@ -47,7 +47,7 @@ interface ProjectRow {
 // 이 둘을 구분해서, 정적 경로는 그대로 site-relative URL로 쓰고 실제 업로드 파일만 Storage
 // 공개 URL로 변환한다 — 안 그러면 시드 이미지가 존재하지 않는 Storage 객체를 가리키게 된다.
 function resolveImageSrc(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  supabase: ReturnType<typeof createPublicClient>,
   path: string
 ): string {
   if (path.startsWith("/") || path.startsWith("images/")) {
@@ -57,7 +57,7 @@ function resolveImageSrc(
 }
 
 function mapRow(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  supabase: ReturnType<typeof createPublicClient>,
   row: ProjectRow
 ): PortfolioProject {
   const categoryRel = Array.isArray(row.project_categories)
@@ -113,7 +113,7 @@ const PROJECT_SELECT =
 
 export async function getSbCategories(kind: ProjectKind): Promise<PortfolioCategory[]> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from("project_categories")
       .select("slug, label")
@@ -131,7 +131,7 @@ export async function getSbProjects(
   categorySlug?: string
 ): Promise<PortfolioProject[]> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     let query = supabase
       .from("projects")
       .select(PROJECT_SELECT)
@@ -163,7 +163,7 @@ export async function getSbProjects(
 
 export async function getSbFeaturedProjects(kind: ProjectKind, limit = 6): Promise<PortfolioProject[]> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from("projects")
       .select(PROJECT_SELECT)
@@ -184,7 +184,7 @@ export async function getSbProjectBySlug(
   kind?: ProjectKind
 ): Promise<PortfolioProject | null> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     let query = supabase
       .from("projects")
       .select(PROJECT_SELECT)
