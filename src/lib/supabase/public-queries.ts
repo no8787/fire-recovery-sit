@@ -21,6 +21,7 @@ interface ProjectImageRow {
   is_render: boolean;
   caption: string | null;
   sort_order: number;
+  stage: "before" | "during" | "after" | null;
 }
 
 interface ProjectRow {
@@ -40,10 +41,18 @@ interface ProjectRow {
   project_images: ProjectImageRow[] | null;
 }
 
-function toPublicUrl(
+// Sprint 2-1 시드 데이터는 project_images.storage_path에 실제 Storage 업로드 경로가 아니라
+// public/images/construction/** 정적 파일의 상대경로를 그대로 저장했다(프론트가 정적 파일을
+// 계속 서빙하는 전제). 반면 관리자 화면에서 실제로 업로드한 이미지는 진짜 Storage 객체 경로다.
+// 이 둘을 구분해서, 정적 경로는 그대로 site-relative URL로 쓰고 실제 업로드 파일만 Storage
+// 공개 URL로 변환한다 — 안 그러면 시드 이미지가 존재하지 않는 Storage 객체를 가리키게 된다.
+function resolveImageSrc(
   supabase: Awaited<ReturnType<typeof createClient>>,
   path: string
 ): string {
+  if (path.startsWith("/") || path.startsWith("images/")) {
+    return path.startsWith("/") ? path : `/${path}`;
+  }
   return supabase.storage.from("project-images").getPublicUrl(path).data.publicUrl;
 }
 
@@ -55,6 +64,13 @@ function mapRow(
     ? row.project_categories[0]
     : row.project_categories;
   const images = [...(row.project_images ?? [])].sort((a, b) => a.sort_order - b.sort_order);
+
+  // stage(before/during/after)가 지정된 사진은 복구 전·중·후 비교 UI로, 지정되지
+  // 않은 사진(대부분의 실제 시공실적)은 지금까지처럼 일반 갤러리로 나간다.
+  // 같은 프로젝트에 두 종류가 섞여 있어도 둘 다 그대로 보여준다(BeforeAfter 참고).
+  const galleryImages = images.filter((img) => !img.stage);
+  const findStage = (stage: "before" | "during" | "after") =>
+    images.find((img) => img.stage === stage);
 
   return {
     id: row.id,
@@ -69,8 +85,20 @@ function mapRow(
     description: row.description,
     thumbnail: row.thumbnail_url,
     images: {
-      gallery: images.map((img) => ({
-        src: toPublicUrl(supabase, img.storage_path),
+      before: (() => {
+        const img = findStage("before");
+        return img ? resolveImageSrc(supabase, img.storage_path) : undefined;
+      })(),
+      during: (() => {
+        const img = findStage("during");
+        return img ? resolveImageSrc(supabase, img.storage_path) : undefined;
+      })(),
+      after: (() => {
+        const img = findStage("after");
+        return img ? resolveImageSrc(supabase, img.storage_path) : undefined;
+      })(),
+      gallery: galleryImages.map((img) => ({
+        src: resolveImageSrc(supabase, img.storage_path),
         isRender: img.is_render,
         caption: img.caption ?? undefined,
       })),
@@ -81,7 +109,7 @@ function mapRow(
 }
 
 const PROJECT_SELECT =
-  "id, slug, title, region, building_type, project_nature, period, scope, description, thumbnail_url, is_featured, is_sample, project_categories(slug), project_images(storage_path, is_render, caption, sort_order)";
+  "id, slug, title, region, building_type, project_nature, period, scope, description, thumbnail_url, is_featured, is_sample, project_categories(slug), project_images(storage_path, is_render, caption, sort_order, stage)";
 
 export async function getSbCategories(kind: ProjectKind): Promise<PortfolioCategory[]> {
   try {
