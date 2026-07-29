@@ -1,25 +1,67 @@
 @import "tailwindcss";
 
+/*
+ * Sprint 3 디자인 토큰. 기존 네이비 기반 브랜드를 유지하되, 프리미엄한 톤으로
+ * 값을 정리한다. 색상은 여기 한 곳에서만 정의하고 컴포넌트에서는 아래 Tailwind
+ * 클래스(brand-*)로만 참조한다 — 각 파일에 하드코딩된 HEX를 늘리지 않기 위함.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
+  --background: #fdfcfb; /* Warm White */
+  --foreground: #1b1f27; /* Charcoal */
+
+  --brand-navy-950: #0a0f1c;
+  --brand-navy-900: #0d1526;
+  --brand-navy-800: #16223a;
+  --brand-navy-700: #223252;
+
+  --brand-warm-white: #fdfcfb;
+  --brand-charcoal: #1b1f27;
+  --brand-muted: #6b7280;
+
+  --brand-orange-600: #ea580c;
+  --brand-orange-700: #c2410c;
+  --brand-amber-500: #f59e0b;
+
+  /* 그림자는 최소한으로만 쓴다(과한 그림자 지양). */
+  --shadow-soft: 0 8px 24px -8px rgba(13, 21, 38, 0.12);
+  --shadow-soft-lg: 0 16px 40px -12px rgba(13, 21, 38, 0.18);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-brand-navy-950: var(--brand-navy-950);
+  --color-brand-navy-900: var(--brand-navy-900);
+  --color-brand-navy-800: var(--brand-navy-800);
+  --color-brand-navy-700: var(--brand-navy-700);
+  --color-brand-warm-white: var(--brand-warm-white);
+  --color-brand-charcoal: var(--brand-charcoal);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-orange-600: var(--brand-orange-600);
+  --color-brand-orange-700: var(--brand-orange-700);
+  --color-brand-amber-500: var(--brand-amber-500);
+
+  --font-sans: var(--font-pretendard), var(--font-inter), "Apple SD Gothic Neo",
+    "Malgun Gothic", "Noto Sans KR", system-ui, -apple-system, sans-serif;
+
+  --shadow-brand-soft: var(--shadow-soft);
+  --shadow-brand-soft-lg: var(--shadow-soft-lg);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family:
-    "Pretendard Variable",
-    Pretendard,
-    "Apple SD Gothic Neo",
-    "Malgun Gothic",
-    "Noto Sans KR",
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: var(--font-sans);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

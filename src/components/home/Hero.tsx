@@ -1,9 +1,9 @@
-import { PhoneCall, MessageCircle, ShieldCheck, BadgeCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { HeroGallery, type HeroGallerySlide } from "@/components/home/HeroGallery";
 import { TrustBadgeStrip } from "@/components/home/TrustBadgeStrip";
-import { COMPANY, TEL_HREF, KAKAO_HREF } from "@/lib/constants";
+import { COMPANY } from "@/lib/constants";
 import { getSbFeaturedProjects } from "@/lib/supabase/public-queries";
 
 // Hero 우측 갤러리는 지명원에 실제로 수록된 시공사진(대표 시공실적)을 사용한다.
@@ -21,36 +21,27 @@ export async function Hero() {
   const slides = (await getHeroSlides()).filter((s) => s.src);
 
   return (
-    <section className="border-b border-slate-200 bg-slate-900 text-white">
-      <Container className="grid gap-10 py-14 sm:py-20 md:grid-cols-2 md:items-center md:py-24">
+    <section className="relative overflow-hidden bg-brand-navy-950 text-white">
+      {/* Premium Overlay: 코너에 은은한 브랜드 그라데이션만 — 과한 장식 없이 톤만 깊게 */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_15%_0%,rgba(234,88,12,0.16),transparent_60%)]"
+        aria-hidden="true"
+      />
+
+      <Container className="relative grid gap-10 py-16 sm:py-20 md:grid-cols-2 md:items-center md:py-24">
         <div>
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-slate-200">
-            <ShieldCheck className="h-4 w-4" aria-hidden="true" />
-            {COMPANY.nameKo} 화재복구 전문
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-xs font-semibold tracking-wide text-slate-200">
+            <ShieldCheck className="h-3.5 w-3.5 text-brand-amber-500" aria-hidden="true" />
+            화재복구 전문기업 {COMPANY.nameKo}
           </p>
 
-          <h1 className="text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl">
-            화재 발생부터
+          <h1 className="text-[30px] font-extrabold leading-[1.25] tracking-[-0.03em] sm:text-[36px] md:text-[38px] md:leading-[1.25] lg:text-[42px]">
+            24시간 긴급출동
             <br />
-            완전한 복구까지
+            보험처리부터 원상복구까지
           </h1>
 
-          <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-orange-300 sm:text-base">
-            <li className="flex items-center gap-1.5">
-              <BadgeCheck className="h-4 w-4" aria-hidden="true" />
-              24시간 긴급출동
-            </li>
-            <li className="flex items-center gap-1.5">
-              <BadgeCheck className="h-4 w-4" aria-hidden="true" />
-              보험사 협업
-            </li>
-            <li className="flex items-center gap-1.5">
-              <BadgeCheck className="h-4 w-4" aria-hidden="true" />
-              무료 현장조사
-            </li>
-          </ul>
-
-          <p className="mt-4 max-w-lg text-base text-slate-300 sm:text-lg">
+          <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-slate-300 sm:text-base">
             현장조사부터 준공까지, 화재복구 전공정을 한 곳에서 통합 관리합니다.
           </p>
 
@@ -59,39 +50,22 @@ export async function Hero() {
               긴급상담 신청
             </Button>
             <Button
-              href={TEL_HREF}
+              href="/portfolio"
               size="lg"
               variant="outline"
-              className="!border-white/30 !text-white hover:!bg-white/10"
+              className="!border-white/25 !text-white hover:!bg-white/10"
             >
-              <PhoneCall className="h-4 w-4" aria-hidden="true" />
-              전화 즉시연결
-            </Button>
-            <Button
-              href={KAKAO_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              size="lg"
-              className="!bg-[#FEE500] !text-[#191600] hover:!bg-[#f5dc00]"
-            >
-              <MessageCircle className="h-4 w-4" aria-hidden="true" />
-              카카오톡 상담
+              시공사례 보기
             </Button>
           </div>
-          <Button
-            href="/fire-cases"
-            variant="ghost"
-            size="md"
-            className="mt-3 !text-slate-300 hover:!bg-white/10"
-          >
-            복구사례 보기 →
-          </Button>
         </div>
 
         <HeroGallery slides={slides} />
       </Container>
 
-      <TrustBadgeStrip />
+      <Container className="relative pb-14 sm:pb-16 md:pb-20">
+        <TrustBadgeStrip />
+      </Container>
     </section>
   );
 }
