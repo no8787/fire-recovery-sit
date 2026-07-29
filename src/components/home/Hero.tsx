@@ -1,25 +1,11 @@
+import Image from "next/image";
 import { ShieldCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { HeroGallery, type HeroGallerySlide } from "@/components/home/HeroGallery";
 import { TrustBadgeStrip } from "@/components/home/TrustBadgeStrip";
 import { COMPANY } from "@/lib/constants";
-import { getSbFeaturedProjects } from "@/lib/supabase/public-queries";
 
-// Hero 우측 갤러리는 지명원에 실제로 수록된 시공사진(대표 시공실적)을 사용한다.
-// 화재복구 자체 시공사례는 아직 없으므로(지명원 상 실적 없음), "화재 피해 전/후"로
-// 오인되지 않도록 캡션에는 항상 실제 공사 내용만 정확히 표기한다.
-async function getHeroSlides(): Promise<HeroGallerySlide[]> {
-  const featured = await getSbFeaturedProjects("construction", 6);
-  return featured.map((p) => ({
-    src: p.thumbnail ?? "",
-    caption: `${p.title} · ${p.period}`,
-  }));
-}
-
-export async function Hero() {
-  const slides = (await getHeroSlides()).filter((s) => s.src);
-
+export function Hero() {
   return (
     <section className="relative overflow-hidden bg-brand-navy-950 text-white">
       {/* Premium Overlay: 코너에 은은한 브랜드 그라데이션만 — 과한 장식 없이 톤만 깊게 */}
@@ -62,7 +48,20 @@ export async function Hero() {
           </div>
         </div>
 
-        <HeroGallery slides={slides} />
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/10 sm:aspect-[16/11]">
+          <Image
+            src="/images/fire-recovery/hero/main-hero-fire-recovery.webp"
+            alt="화재 피해 현장을 점검하는 (주)더가연 복구팀"
+            fill
+            priority
+            className="object-cover"
+            sizes="(min-width: 768px) 50vw, 100vw"
+          />
+          <div
+            className="absolute inset-0 bg-gradient-to-t from-brand-navy-950/60 via-transparent to-transparent"
+            aria-hidden="true"
+          />
+        </div>
       </Container>
 
       <Container className="relative pb-14 sm:pb-16 md:pb-20">
