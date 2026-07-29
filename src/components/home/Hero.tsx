@@ -4,20 +4,21 @@ import { Button } from "@/components/ui/Button";
 import { HeroGallery, type HeroGallerySlide } from "@/components/home/HeroGallery";
 import { TrustBadgeStrip } from "@/components/home/TrustBadgeStrip";
 import { COMPANY, TEL_HREF, KAKAO_HREF } from "@/lib/constants";
-import { getFeaturedProjects } from "@/lib/mock/portfolio";
+import { getSbFeaturedProjects } from "@/lib/supabase/public-queries";
 
 // Hero 우측 갤러리는 지명원에 실제로 수록된 시공사진(대표 시공실적)을 사용한다.
 // 화재복구 자체 시공사례는 아직 없으므로(지명원 상 실적 없음), "화재 피해 전/후"로
 // 오인되지 않도록 캡션에는 항상 실제 공사 내용만 정확히 표기한다.
-function getHeroSlides(): HeroGallerySlide[] {
-  return getFeaturedProjects(6).map((p) => ({
+async function getHeroSlides(): Promise<HeroGallerySlide[]> {
+  const featured = await getSbFeaturedProjects("construction", 6);
+  return featured.map((p) => ({
     src: p.thumbnail ?? "",
     caption: `${p.title} · ${p.period}`,
   }));
 }
 
-export function Hero() {
-  const slides = getHeroSlides().filter((s) => s.src);
+export async function Hero() {
+  const slides = (await getHeroSlides()).filter((s) => s.src);
 
   return (
     <section className="border-b border-slate-200 bg-slate-900 text-white">

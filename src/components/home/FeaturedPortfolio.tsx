@@ -5,12 +5,16 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { FadeUp } from "@/components/ui/FadeUp";
 import { PortfolioCard } from "@/components/portfolio/PortfolioCard";
-import { getFeaturedProjects } from "@/lib/mock/portfolio";
+import { getSbCategories, getSbFeaturedProjects } from "@/lib/supabase/public-queries";
 
 // 대표 시공사례 1건을 큰 실사진과 함께 강조하고, 나머지는 아래 그리드로 보여준다.
-// 화재복구가 아닌 실제 시공실적 데이터(src/lib/mock/portfolio.ts)를 그대로 사용한다.
-export function FeaturedPortfolio() {
-  const [lead, ...rest] = getFeaturedProjects(6);
+// 화재복구가 아닌 실제 시공실적 데이터(Supabase projects, kind=construction, is_featured=true)를 사용한다.
+export async function FeaturedPortfolio() {
+  const [categories, featured] = await Promise.all([
+    getSbCategories("construction"),
+    getSbFeaturedProjects("construction", 6),
+  ]);
+  const [lead, ...rest] = featured;
   if (!lead) return null;
 
   return (
@@ -85,7 +89,7 @@ export function FeaturedPortfolio() {
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {rest.map((project, i) => (
               <FadeUp key={project.id} delay={i * 80}>
-                <PortfolioCard project={project} />
+                <PortfolioCard project={project} categories={categories} />
               </FadeUp>
             ))}
           </div>

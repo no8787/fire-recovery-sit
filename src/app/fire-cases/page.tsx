@@ -6,8 +6,8 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { FireRecoveryIllustration } from "@/components/ui/FireRecoveryIllustration";
 import { PortfolioCard } from "@/components/portfolio/PortfolioCard";
-import { fireCaseCategories, getFireCasesByCategory } from "@/lib/data/fire-recovery-cases";
 import { fireRecoveryExamples } from "@/lib/data/fire-recovery-examples";
+import { getSbCategories, getSbProjects } from "@/lib/supabase/public-queries";
 
 export const metadata: Metadata = {
   title: "화재복구 사례",
@@ -20,7 +20,10 @@ export default async function FireCasesPage({
   searchParams: Promise<{ category?: string }>;
 }) {
   const { category } = await searchParams;
-  const cases = getFireCasesByCategory(category);
+  const [fireCaseCategories, cases] = await Promise.all([
+    getSbCategories("fire_case"),
+    getSbProjects("fire_case", category),
+  ]);
 
   return (
     <>

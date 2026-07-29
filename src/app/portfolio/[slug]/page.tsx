@@ -7,14 +7,12 @@ import { SampleBadge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { BeforeAfter } from "@/components/portfolio/BeforeAfter";
 import { PortfolioCard } from "@/components/portfolio/PortfolioCard";
-import {
-  portfolioCategories,
-  portfolioProjects,
-  getProjectBySlug,
-} from "@/lib/mock/portfolio";
+import { getSbCategories, getSbProjects, getSbProjectBySlug } from "@/lib/supabase/public-queries";
 
-export function generateStaticParams() {
-  return portfolioProjects.map((project) => ({ slug: project.slug }));
+export async function generateStaticParams() {
+  const projects = await getSbProjects("construction");
+  // 사진이 있는 시공사례만 상세페이지를 생성한다(텍스트만 있는 실적은 목록의 표에만 노출).
+  return projects.filter((p) => (p.images.gallery?.length ?? 0) > 0).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -23,7 +21,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getSbProjectBySlug(slug, "construction");
   if (!project) return {};
 
   return {
@@ -38,11 +36,15 @@ export default async function PortfolioDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getSbProjectBySlug(slug, "construction");
   if (!project) notFound();
 
+  const [portfolioCategories, allProjects] = await Promise.all([
+    getSbCategories("construction"),
+    getSbProjects("construction"),
+  ]);
   const category = portfolioCategories.find((c) => c.slug === project.categorySlug);
-  const related = portfolioProjects
+  const related = allProjects
     .filter((p) => p.categorySlug === project.categorySlug && p.id !== project.id)
     .slice(0, 3);
   const isFireDamage = ["화재", "그을음·냄새", "소방수·침수", "전기·설비", "복합피해"].includes(
@@ -129,7 +131,7 @@ export default async function PortfolioDetailPage({
               <h2 className="text-lg font-bold text-slate-900">같은 분류의 다른 시공실적</h2>
               <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {related.map((p) => (
-                  <PortfolioCard key={p.id} project={p} />
+                  <PortfolioCard key={p.id} project={p} categories={portfolioCategories} />
                 ))}
               </div>
             </div>

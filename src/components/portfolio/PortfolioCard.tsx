@@ -3,16 +3,15 @@ import Link from "next/link";
 import { MapPin, Images } from "lucide-react";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { SampleBadge, Badge } from "@/components/ui/Badge";
-import { portfolioCategories as defaultCategories } from "@/lib/mock/portfolio";
 import type { PortfolioCategory, PortfolioProject } from "@/lib/types";
 
 export function PortfolioCard({
   project,
-  categories = defaultCategories,
+  categories,
   linkBase = "/portfolio",
 }: {
   project: PortfolioProject;
-  categories?: PortfolioCategory[];
+  categories: PortfolioCategory[];
   linkBase?: string;
 }) {
   const category = categories.find((c) => c.slug === project.categorySlug);

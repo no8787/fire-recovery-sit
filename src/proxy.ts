@@ -5,7 +5,7 @@ import { NextResponse, type NextRequest } from "next/server";
 // 확인하고, 세부 역할(counselor/editor)별 화면 접근 제어는 Sprint 2-2에서 각 페이지가 담당한다.
 const PUBLIC_ADMIN_PATHS = ["/admin/login"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(

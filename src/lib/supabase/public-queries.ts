@@ -151,15 +151,20 @@ export async function getSbFeaturedProjects(kind: ProjectKind, limit = 6): Promi
   }
 }
 
-export async function getSbProjectBySlug(slug: string): Promise<PortfolioProject | null> {
+export async function getSbProjectBySlug(
+  slug: string,
+  kind?: ProjectKind
+): Promise<PortfolioProject | null> {
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase
+    let query = supabase
       .from("projects")
       .select(PROJECT_SELECT)
       .eq("slug", slug)
-      .eq("status", "published")
-      .maybeSingle();
+      .eq("status", "published");
+    if (kind) query = query.eq("kind", kind);
+
+    const { data, error } = await query.maybeSingle();
     if (error || !data) return null;
     return mapRow(supabase, data as unknown as ProjectRow);
   } catch {

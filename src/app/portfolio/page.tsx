@@ -3,9 +3,7 @@ import Link from "next/link";
 import { PageHero } from "@/components/layout/PageHero";
 import { Container } from "@/components/ui/Container";
 import { PortfolioCard } from "@/components/portfolio/PortfolioCard";
-import { portfolioCategories, getProjectsByCategory } from "@/lib/mock/portfolio";
-import { getRecordsByCategory } from "@/lib/data/construction";
-import type { ConstructionCategorySlug } from "@/lib/types";
+import { getSbCategories, getSbProjects } from "@/lib/supabase/public-queries";
 
 export const metadata: Metadata = {
   title: "시공실적",
@@ -19,8 +17,14 @@ export default async function PortfolioPage({
   searchParams: Promise<{ category?: string }>;
 }) {
   const { category } = await searchParams;
-  const projects = getProjectsByCategory(category);
-  const textRecords = getRecordsByCategory(category as ConstructionCategorySlug | undefined);
+  const [portfolioCategories, allProjects] = await Promise.all([
+    getSbCategories("construction"),
+    getSbProjects("construction", category),
+  ]);
+  // 지명원 시공실적 중 사진이 있는 건은 카드로, 사진 없이 텍스트만 있는 건은 하단 표로 보여준다
+  // (기존 mock/portfolio.ts + data/construction.ts 두 파일로 나뉘어 있던 것과 동일한 구조).
+  const projects = allProjects.filter((p) => (p.images.gallery?.length ?? 0) > 0);
+  const textRecords = allProjects.filter((p) => (p.images.gallery?.length ?? 0) === 0);
 
   return (
     <>
@@ -65,7 +69,7 @@ export default async function PortfolioPage({
               </p>
               <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {projects.map((project) => (
-                  <PortfolioCard key={project.id} project={project} />
+                  <PortfolioCard key={project.id} project={project} categories={portfolioCategories} />
                 ))}
               </div>
             </>
@@ -95,11 +99,9 @@ export default async function PortfolioPage({
                   <tbody className="divide-y divide-slate-100">
                     {textRecords.map((rec) => (
                       <tr key={rec.id}>
-                        <td className="whitespace-nowrap px-4 py-3 text-slate-500">
-                          {rec.year}.{rec.month}
-                        </td>
-                        <td className="px-4 py-3 text-slate-800">{rec.projectName}</td>
-                        <td className="px-4 py-3 text-slate-600">{rec.client}</td>
+                        <td className="whitespace-nowrap px-4 py-3 text-slate-500">{rec.period}</td>
+                        <td className="px-4 py-3 text-slate-800">{rec.title}</td>
+                        <td className="px-4 py-3 text-slate-600">{rec.region}</td>
                       </tr>
                     ))}
                   </tbody>

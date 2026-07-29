@@ -6,16 +6,12 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { BeforeAfter } from "@/components/portfolio/BeforeAfter";
 import { PortfolioCard } from "@/components/portfolio/PortfolioCard";
-import {
-  fireCaseCategories,
-  fireRecoveryCases,
-  getFireCaseBySlug,
-} from "@/lib/data/fire-recovery-cases";
+import { getSbCategories, getSbProjects, getSbProjectBySlug } from "@/lib/supabase/public-queries";
 
-// 현재 화재복구 사례 데이터가 비어 있어 정적 페이지가 생성되지 않습니다.
-// 실제 사례가 fire-recovery-cases.ts에 추가되면 자동으로 상세페이지가 생깁니다.
-export function generateStaticParams() {
-  return fireRecoveryCases.map((project) => ({ slug: project.slug }));
+// 화재복구 사례(kind=fire_case)가 실제로 등록되면 자동으로 상세페이지가 생깁니다.
+export async function generateStaticParams() {
+  const cases = await getSbProjects("fire_case");
+  return cases.map((project) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({
@@ -24,7 +20,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = getFireCaseBySlug(slug);
+  const project = await getSbProjectBySlug(slug, "fire_case");
   if (!project) return {};
 
   return {
@@ -39,11 +35,15 @@ export default async function FireCaseDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = getFireCaseBySlug(slug);
+  const project = await getSbProjectBySlug(slug, "fire_case");
   if (!project) notFound();
 
+  const [fireCaseCategories, allCases] = await Promise.all([
+    getSbCategories("fire_case"),
+    getSbProjects("fire_case"),
+  ]);
   const category = fireCaseCategories.find((c) => c.slug === project.categorySlug);
-  const related = fireRecoveryCases
+  const related = allCases
     .filter((p) => p.categorySlug === project.categorySlug && p.id !== project.id)
     .slice(0, 3);
 
