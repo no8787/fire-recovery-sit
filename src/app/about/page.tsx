@@ -4,6 +4,15 @@ import { PageHero } from "@/components/layout/PageHero";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { COMPANY, TEL_HREF } from "@/lib/constants";
+import { CERTIFICATIONS, CERTIFICATION_CATEGORY_LABELS, type Certification } from "@/lib/data/certifications";
+
+const CERTIFICATION_CATEGORY_ORDER: Certification["category"][] = [
+  "license",
+  "association",
+  "certification",
+  "insurance",
+  "capability",
+];
 
 export const metadata: Metadata = {
   title: "회사소개",
@@ -105,17 +114,41 @@ export default function AboutPage() {
 
       <section className="py-14 sm:py-16">
         <Container>
-          <SectionHeading eyebrow="인증" title="보유 인증 및 협회" align="center" />
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {COMPANY.certifications.map((cert) => (
-              <div
-                key={cert}
-                className="flex items-center gap-3 rounded-lg border border-slate-200 p-4"
-              >
-                <ShieldCheck className="h-5 w-5 shrink-0 text-orange-600" aria-hidden="true" />
-                <p className="text-sm font-semibold text-slate-800">{cert}</p>
-              </div>
-            ))}
+          <SectionHeading
+            eyebrow="인증·면허"
+            title="보유 인증 및 협회 가입"
+            description="공사지명원(2025-10-14) 기준으로 확인된 등록·면허·인증 현황입니다."
+            align="center"
+          />
+          <div className="mt-10 space-y-10">
+            {CERTIFICATION_CATEGORY_ORDER.map((category) => {
+              const items = CERTIFICATIONS.filter((c) => c.category === category);
+              if (items.length === 0) return null;
+              return (
+                <div key={category}>
+                  <p className="text-xs font-bold tracking-wide text-orange-600 uppercase">
+                    {CERTIFICATION_CATEGORY_LABELS[category]}
+                  </p>
+                  <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {items.map((cert) => (
+                      <div
+                        key={cert.id}
+                        className="flex items-start gap-3 rounded-lg border border-slate-200 p-4"
+                      >
+                        <ShieldCheck
+                          className="mt-0.5 h-5 w-5 shrink-0 text-orange-600"
+                          aria-hidden="true"
+                        />
+                        <div>
+                          <p className="text-sm font-semibold text-slate-800">{cert.name}</p>
+                          <p className="mt-1 text-xs text-slate-500">{cert.issuer}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </Container>
       </section>
