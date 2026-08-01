@@ -2,7 +2,6 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Icon } from "@/components/ui/Icon";
 import { FadeUp } from "@/components/ui/FadeUp";
-import { ProcessFlow } from "@/components/home/ProcessFlow";
 import { services } from "@/lib/mock/services";
 
 export function ServicesGrid() {
@@ -15,8 +14,6 @@ export function ServicesGrid() {
           description="현장조사부터 보험자료 지원까지, 필요한 공정을 통합 관리합니다."
           align="center"
         />
-
-        <ProcessFlow />
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((service, i) => (

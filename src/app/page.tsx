@@ -1,12 +1,12 @@
 import { Hero } from "@/components/home/Hero";
 import { StatsSection } from "@/components/home/StatsSection";
+import { ProblemSection } from "@/components/home/ProblemSection";
+import { ProcessSteps } from "@/components/home/ProcessSteps";
 import { EmergencyNotice } from "@/components/home/EmergencyNotice";
 import { ServicesGrid } from "@/components/home/ServicesGrid";
 import { Container } from "@/components/ui/Container";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { FadeUp } from "@/components/ui/FadeUp";
-import { ProcessTimeline } from "@/components/process/ProcessTimeline";
 import { FeaturedPortfolio } from "@/components/home/FeaturedPortfolio";
 import { Strengths } from "@/components/home/Strengths";
 import { ContactCTA } from "@/components/home/ContactCTA";
@@ -16,17 +16,10 @@ export default function HomePage() {
     <>
       <Hero />
       <StatsSection />
+      <ProblemSection />
+      <ProcessSteps />
       <EmergencyNotice />
       <ServicesGrid />
-
-      <section className="bg-slate-50 py-16 sm:py-20">
-        <Container>
-          <SectionHeading eyebrow="복구 절차" title="상담부터 준공까지, 7단계 프로세스" align="center" />
-          <div className="mt-10">
-            <ProcessTimeline />
-          </div>
-        </Container>
-      </section>
 
       <FeaturedPortfolio />
 
