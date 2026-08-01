@@ -20,7 +20,7 @@ const OPTIONS = [
   {
     href: KAKAO_HREF,
     icon: MessageCircle,
-    title: "카카오톡 상담",
+    title: "24시간 채팅상담",
     description: "채팅으로 바로 문의하기",
     className: "bg-[#FEE500] text-[#191600] hover:bg-[#f5dc00]",
     target: "_blank",
@@ -37,7 +37,7 @@ export function ContactCTA() {
             지금 바로 화재복구 상담을 신청하세요
           </h2>
           <p className="mt-3 max-w-xl text-sm text-orange-50 sm:text-base">
-            현장조사부터 복구 완료까지, {COMPANY.nameKo}가 처음부터 끝까지 함께합니다.
+            현장조사부터 복구 완료까지, {COMPANY.nameKo}이 처음부터 끝까지 함께합니다.
           </p>
         </div>
 

@@ -3,7 +3,7 @@ import { Clock, ShieldCheck, Wrench, MapPinned } from "lucide-react";
 // Hero 하단에 붙는 신뢰 아이콘 카드 4종(Sprint 3 확정 문구). 신뢰"지표"(숫자 카운트업)
 // 섹션과는 다른 요소 — 여기는 "무엇을 보장하는지"를 짧게 보여주는 역할만 한다.
 const BADGES = [
-  { icon: Clock, label: "24시간 상담 접수" },
+  { icon: Clock, label: "화재복구 상담 접수" },
   { icon: ShieldCheck, label: "보험처리 지원" },
   { icon: Wrench, label: "원상복구 전문" },
   { icon: MapPinned, label: "전국 대응" },

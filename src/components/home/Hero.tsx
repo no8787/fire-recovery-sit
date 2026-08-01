@@ -18,7 +18,7 @@ export function Hero() {
         <div>
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-xs font-semibold tracking-wide text-slate-200">
             <ShieldCheck className="h-3.5 w-3.5 text-brand-amber-500" aria-hidden="true" />
-            24시간 상담 접수
+            화재복구 전문기업
           </p>
 
           <h1 className="text-[30px] font-extrabold leading-[1.25] tracking-[-0.03em] sm:text-[36px] md:text-[38px] md:leading-[1.25] lg:text-[42px]">
@@ -26,7 +26,7 @@ export function Hero() {
           </h1>
 
           <p className="mt-3 text-base font-semibold text-slate-300 sm:text-lg">
-            화재복구 전문기업 {COMPANY.nameKo}
+            {COMPANY.nameKo}
           </p>
 
           <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-slate-400 sm:text-base">
@@ -35,7 +35,7 @@ export function Hero() {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Button href="/contact" size="lg">
-              긴급상담 신청
+              화재복구 상담 신청
             </Button>
             <Button
               href="/portfolio"

@@ -54,7 +54,7 @@ export function ProcessSteps() {
         <SectionHeading
           eyebrow="복구 프로세스"
           title="화재복구 5단계"
-          description="현장진단부터 최종점검까지, 전 과정을 (주)더가연이 직접 수행합니다."
+          description="현장진단부터 최종점검까지, 전 과정을 (주)더가연이 통합 관리합니다."
           align="center"
         />
 

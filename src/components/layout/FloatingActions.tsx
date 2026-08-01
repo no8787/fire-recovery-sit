@@ -53,7 +53,7 @@ export function FloatingActions() {
           className="flex items-center justify-center gap-2 bg-[#FEE500] px-4 py-3 text-sm font-bold text-[#191600] transition-colors hover:bg-[#f5dc00]"
         >
           <MessageCircle className="h-4 w-4" aria-hidden="true" />
-          카카오톡 상담신청
+          24시간 채팅상담
         </a>
       </div>
     </div>

@@ -37,6 +37,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# 고객 원본 사진 반입 폴더.
+# public/ 안에 두면 URL에 상호명이 그대로 노출되고(상호 비공개 원칙 위반),
+# 원본 수백 장이 git·Vercel 배포에 통째로 실린다. 원본은 여기 두고,
+# 실제 게시용은 선별·리사이즈·익명 슬러그로 public/images/ 아래에 별도 배치한다.
+/imports/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

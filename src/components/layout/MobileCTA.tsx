@@ -18,7 +18,7 @@ export function MobileCTA() {
         className="flex flex-1 flex-col items-center justify-center gap-0.5 bg-[#FEE500] py-3 text-[11px] font-bold text-[#191600] active:bg-[#f5dc00]"
       >
         <MessageCircle className="h-4 w-4" aria-hidden="true" />
-        카카오상담
+        24시간 채팅상담
       </a>
       <a
         href="/contact"

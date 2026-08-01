@@ -28,7 +28,7 @@ export const strengths: StrengthItem[] = [
   },
   {
     title: "신속한 현장방문",
-    description: "접수 후 신속하게 현장을 방문해 초기 대응 골든타임을 지킵니다.",
+    description: "접수 후 신속하게 현장을 방문해 초기 대응을 진행합니다.",
     icon: "Clock",
   },
   {

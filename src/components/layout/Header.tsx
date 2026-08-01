@@ -58,7 +58,7 @@ export function Header() {
             href="/contact"
             className="rounded-lg bg-brand-orange-600 px-5 py-2.5 text-[15px] font-semibold text-white shadow-brand-soft transition-colors hover:bg-brand-orange-700"
           >
-            긴급상담 신청
+            화재복구 상담 신청
           </Link>
         </div>
 
@@ -98,7 +98,7 @@ export function Header() {
               onClick={() => setOpen(false)}
               className="mt-2 rounded-lg bg-brand-orange-600 px-4 py-3 text-center text-[15px] font-semibold text-white"
             >
-              긴급상담 신청
+              화재복구 상담 신청
             </Link>
           </Container>
         </div>

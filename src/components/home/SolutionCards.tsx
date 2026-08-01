@@ -39,7 +39,7 @@ export function SolutionCards() {
         <SectionHeading
           eyebrow="전문 솔루션"
           title="화재복구 전문 솔루션"
-          description="현장에서 가장 자주 필요한 전문 서비스를 직접 수행합니다."
+          description="현장에서 가장 자주 필요한 전문 서비스를 통합 관리합니다."
           align="center"
         />
 
