@@ -4,13 +4,10 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireEditor } from "@/lib/supabase/admin-auth";
 import { resolveUniqueSlug } from "@/lib/supabase/slug-dedupe";
+import { revalidatePostsPublic as revalidatePublic } from "@/lib/revalidate-public";
 
 function backWithError(path: string, message: string): never {
   redirect(`${path}?error=${encodeURIComponent(message)}`);
-}
-
-function revalidatePublic() {
-  revalidatePath("/guide");
 }
 
 export async function createPostAction(formData: FormData) {

@@ -1,18 +1,12 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { requireEditor } from "@/lib/supabase/admin-auth";
+import { revalidateCategoriesPublic as revalidatePublicPages } from "@/lib/revalidate-public";
 import type { ProjectKind } from "@/lib/supabase/database.types";
 
 function backWithError(message: string): never {
   redirect(`/admin/categories?error=${encodeURIComponent(message)}`);
-}
-
-function revalidatePublicPages() {
-  revalidatePath("/portfolio");
-  revalidatePath("/fire-cases");
-  revalidatePath("/admin/categories");
 }
 
 export async function createCategoryAction(formData: FormData) {
