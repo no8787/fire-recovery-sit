@@ -3,7 +3,7 @@ import { StatsSection } from "@/components/home/StatsSection";
 import { ProblemSection } from "@/components/home/ProblemSection";
 import { ProcessSteps } from "@/components/home/ProcessSteps";
 import { EmergencyNotice } from "@/components/home/EmergencyNotice";
-import { ServicesGrid } from "@/components/home/ServicesGrid";
+import { SolutionCards } from "@/components/home/SolutionCards";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { FadeUp } from "@/components/ui/FadeUp";
@@ -19,7 +19,7 @@ export default function HomePage() {
       <ProblemSection />
       <ProcessSteps />
       <EmergencyNotice />
-      <ServicesGrid />
+      <SolutionCards />
 
       <FeaturedPortfolio />
 

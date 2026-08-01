@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { strengths } from "@/lib/mock/strengths";
@@ -33,7 +34,31 @@ export function Strengths() {
           align="center"
           tone="dark"
         />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          <div className="relative aspect-[3/2] w-full overflow-hidden rounded-xl border border-white/10">
+            <Image
+              src="/images/fire-recovery/extra/equipment-operation-team.webp"
+              alt="복구 장비를 함께 운용하는 (주)더가연 현장팀"
+              fill
+              loading="lazy"
+              className="object-cover"
+              sizes="(min-width: 640px) 50vw, 100vw"
+            />
+          </div>
+          <div className="relative aspect-[3/2] w-full overflow-hidden rounded-xl border border-white/10">
+            <Image
+              src="/images/fire-recovery/extra/field-cleanup-team.webp"
+              alt="화재 현장을 함께 정리하는 (주)더가연 현장팀"
+              fill
+              loading="lazy"
+              className="object-cover"
+              sizes="(min-width: 640px) 50vw, 100vw"
+            />
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {strengths.map((item) => {
             const StrengthIcon = ICONS[item.icon] ?? Layers;
             return (
