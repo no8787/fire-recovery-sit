@@ -51,6 +51,20 @@ export const TRUST_STATS = [
   { label: "전문 시공 인력", value: 13, suffix: "명" },
 ] as const;
 
+// 위 숫자(특히 "보유 면허·인증 8종")를 구체적으로 뒷받침하는 자격 목록.
+// 화재복구 전 과정을 하도급 없이 직접 수행하고, 사고 발생 시에도 책임질 수 있다는
+// 근거이므로 신뢰 지표 섹션에 텍스트로 함께 노출한다. 지명원(2025-10-14) 기준
+// 확인된 사실만 사용 — 스캔 이미지는 3단계(보유 면허·전문성)에서 붙인다.
+export const TRUST_CREDENTIALS = [
+  {
+    title: "건설업 등록 면허 4종 직접 보유",
+    detail: COMPANY.businessScope.join(" · "),
+  },
+  { title: "전문건설공제조합 가입", detail: null },
+  { title: "중대재해 배상책임보험 · 영업배상책임보험 가입", detail: null },
+  { title: "대한전문건설협회(KOSCA) 회원사", detail: null },
+] as const;
+
 // 내비게이션 순서: 1)화재복구 2)회사소개 3)시공실적 4)화재복구 사례 5)상담신청 6)문의하기
 // - 화재복구 → 기존 /services("화재복구 8대 서비스") 재사용
 // - 시공실적 → 기존 /portfolio 재사용, 지명원 실제 시공실적 데이터로 교체됨

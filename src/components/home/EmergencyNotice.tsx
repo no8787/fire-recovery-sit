@@ -39,23 +39,12 @@ export function EmergencyNotice() {
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
           {STEPS.map(({ icon: StepIcon, title, description }, i) => (
-            <FadeUp key={title} delay={i * 100} className="relative">
+            <FadeUp key={title} delay={i * 100}>
               <div className="h-full rounded-xl border border-amber-200 bg-white p-5">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-500 text-sm font-extrabold text-white">
-                    {i + 1}
-                  </span>
-                  <StepIcon className="h-5 w-5 text-amber-600" aria-hidden="true" />
-                </div>
+                <StepIcon className="h-5 w-5 text-amber-600" aria-hidden="true" />
                 <p className="mt-3 text-sm font-bold text-slate-900">{title}</p>
                 <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{description}</p>
               </div>
-              {i < STEPS.length - 1 && (
-                <div
-                  className="absolute right-[-18px] top-1/2 hidden h-px w-9 -translate-y-1/2 bg-amber-300 lg:block"
-                  aria-hidden="true"
-                />
-              )}
             </FadeUp>
           ))}
         </div>
