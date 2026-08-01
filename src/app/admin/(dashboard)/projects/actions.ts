@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireEditor } from "@/lib/supabase/admin-auth";
 import { resolveUniqueSlug } from "@/lib/supabase/slug-dedupe";
+import { revalidateProjectsPublic as revalidatePublic } from "@/lib/revalidate-public";
 import type { ProjectKind, ImageStage } from "@/lib/supabase/database.types";
 
 const ALLOWED_IMAGE_MIME: Record<string, string> = {
@@ -16,11 +17,6 @@ const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 function backWithError(path: string, message: string): never {
   redirect(`${path}?error=${encodeURIComponent(message)}`);
-}
-
-function revalidatePublic() {
-  revalidatePath("/portfolio");
-  revalidatePath("/fire-cases");
 }
 
 function parseScope(raw: string): string[] {

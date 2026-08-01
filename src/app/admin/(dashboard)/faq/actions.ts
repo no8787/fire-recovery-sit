@@ -1,16 +1,11 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
 import { requireEditor } from "@/lib/supabase/admin-auth";
+import { revalidateFaqPublic as revalidatePublic } from "@/lib/revalidate-public";
 
 function backWithError(message: string): never {
   redirect(`/admin/faq?error=${encodeURIComponent(message)}`);
-}
-
-function revalidatePublic() {
-  revalidatePath("/faq");
-  revalidatePath("/admin/faq");
 }
 
 export async function createFaqAction(formData: FormData) {
