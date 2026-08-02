@@ -47,20 +47,6 @@ export const CERTIFICATIONS: Certification[] = [
     imageSrc: null,
   },
   {
-    id: "printing-license",
-    name: "인쇄사 신고필증",
-    issuer: "인천광역시 서구청장",
-    category: "license",
-    imageSrc: null,
-  },
-  {
-    id: "publishing-license",
-    name: "출판사 신고확인증",
-    issuer: "인천광역시 서구청장",
-    category: "license",
-    imageSrc: null,
-  },
-  {
     id: "asbestos-removal-license",
     name: "석면해체·제거업 등록증",
     issuer: "중부지방고용노동청 인천북부지청장",
