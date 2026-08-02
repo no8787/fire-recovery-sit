@@ -1,5 +1,6 @@
 import "server-only";
 import { createPublicClient } from "@/lib/supabase/public-client";
+import { resolveImageSrc } from "@/lib/supabase/image-src";
 import type {
   PortfolioProject,
   PortfolioCategory,
@@ -39,21 +40,6 @@ interface ProjectRow {
   is_sample: boolean;
   project_categories: { slug: string } | { slug: string }[] | null;
   project_images: ProjectImageRow[] | null;
-}
-
-// Sprint 2-1 시드 데이터는 project_images.storage_path에 실제 Storage 업로드 경로가 아니라
-// public/images/construction/** 정적 파일의 상대경로를 그대로 저장했다(프론트가 정적 파일을
-// 계속 서빙하는 전제). 반면 관리자 화면에서 실제로 업로드한 이미지는 진짜 Storage 객체 경로다.
-// 이 둘을 구분해서, 정적 경로는 그대로 site-relative URL로 쓰고 실제 업로드 파일만 Storage
-// 공개 URL로 변환한다 — 안 그러면 시드 이미지가 존재하지 않는 Storage 객체를 가리키게 된다.
-function resolveImageSrc(
-  supabase: ReturnType<typeof createPublicClient>,
-  path: string
-): string {
-  if (path.startsWith("/") || path.startsWith("images/")) {
-    return path.startsWith("/") ? path : `/${path}`;
-  }
-  return supabase.storage.from("project-images").getPublicUrl(path).data.publicUrl;
 }
 
 function mapRow(

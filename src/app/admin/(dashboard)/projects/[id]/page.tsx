@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { ConfirmSubmitButton } from "@/components/admin/ConfirmSubmitButton";
 import { MultiImageUpload } from "@/components/admin/MultiImageUpload";
 import { requireEditor } from "@/lib/supabase/admin-auth";
+import { resolveImageSrc } from "@/lib/supabase/image-src";
 import {
   updateProjectAction,
   deleteProjectImageAction,
@@ -53,9 +54,11 @@ export default async function EditProjectPage({
       .order("sort_order"),
   ]);
 
+  // 시드 데이터의 정적 경로와 실제 Storage 업로드 경로를 구분해야 한다.
+  // 예전에는 getPublicUrl()을 무조건 호출해서 시드 이미지 27건이 전부 깨져 보였다.
   const imagesWithUrl = (images ?? []).map((img) => ({
     ...img,
-    publicUrl: supabase.storage.from("project-images").getPublicUrl(img.storage_path).data.publicUrl,
+    publicUrl: resolveImageSrc(supabase, img.storage_path),
   }));
 
   return (
@@ -203,7 +206,6 @@ export default async function EditProjectPage({
                     fill
                     className="object-cover"
                     sizes="300px"
-                    unoptimized
                   />
                   {project.thumbnail_url === img.publicUrl && (
                     <span className="absolute left-2 top-2 rounded bg-orange-600 px-2 py-0.5 text-[10px] font-bold text-white">

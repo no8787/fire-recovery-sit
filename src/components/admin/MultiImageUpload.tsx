@@ -2,11 +2,18 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { uploadProjectImageAction } from "@/app/admin/(dashboard)/projects/actions";
-import { buildDefaultCaption } from "@/lib/image-caption";
+import {
+  uploadProjectImageAction,
+  prepareImageUploadAction,
+  finalizeImageUploadsAction,
+} from "@/app/admin/(dashboard)/projects/actions";
+import { buildDefaultCaption, buildDefaultAltText } from "@/lib/image-caption";
+import { resizeImageForUpload } from "@/lib/image-resize";
 
 const MAX_FILES = 10;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+// 동시에 올릴 개수. 너무 크면 서버/네트워크에 부담이 되고, 1이면 기존처럼 느리다.
+const UPLOAD_CONCURRENCY = 3;
 
 const STAGE_OPTIONS = [
   { value: "", label: "단계 없음(갤러리)" },
@@ -63,17 +70,14 @@ export function MultiImageUpload({
     const capped = selected.slice(0, MAX_FILES);
     const project = { title: projectTitle, region: projectRegion, projectNature };
     setItems(
-      capped.map((file, idx) => {
-        const defaultCaption = buildDefaultCaption(project, idx, capped.length);
-        return {
-          file,
-          previewUrl: URL.createObjectURL(file),
-          caption: defaultCaption,
-          altText: defaultCaption,
-          stage: "",
-          status: "pending" as const,
-        };
-      })
+      capped.map((file, idx) => ({
+        file,
+        previewUrl: URL.createObjectURL(file),
+        caption: buildDefaultCaption(project, idx, capped.length),
+        altText: buildDefaultAltText(project, idx, capped.length),
+        stage: "",
+        status: "pending" as const,
+      }))
     );
     setProgress({ done: 0, total: 0 });
     e.target.value = "";
@@ -92,20 +96,36 @@ export function MultiImageUpload({
 
   async function handleUploadAll() {
     if (items.length === 0 || uploading) return;
+    const snapshot = items;
     setUploading(true);
-    setProgress({ done: 0, total: items.length });
+    setProgress({ done: 0, total: snapshot.length });
 
-    for (let i = 0; i < items.length; i++) {
+    // sort_order 시작값을 한 번만 받아온다. 실패해도 업로드는 계속하고,
+    // 그 경우 서버가 장마다 count로 보정한다.
+    const prepared = await prepareImageUploadAction(projectId);
+    const startSortOrder = prepared.ok ? prepared.startSortOrder : null;
+
+    async function uploadOne(i: number) {
       setItems((prev) => prev.map((it, idx) => (idx === i ? { ...it, status: "uploading" } : it)));
+
+      const item = snapshot[i];
+      // 원본 대신 축소·WebP 변환본을 보낸다(실패 시 원본으로 자동 폴백).
+      const fileToSend = await resizeImageForUpload(item.file);
 
       const fd = new FormData();
       fd.append("project_id", projectId);
-      fd.append("file", items[i].file);
-      fd.append("stage", items[i].stage);
-      fd.append("caption", items[i].caption);
-      fd.append("alt_text", items[i].altText);
+      fd.append("file", fileToSend);
+      fd.append("stage", item.stage);
+      fd.append("caption", item.caption);
+      fd.append("alt_text", item.altText);
+      if (startSortOrder !== null) fd.append("sort_order", String(startSortOrder + i));
 
-      const result = await uploadProjectImageAction(fd);
+      let result: Awaited<ReturnType<typeof uploadProjectImageAction>>;
+      try {
+        result = await uploadProjectImageAction(fd);
+      } catch {
+        result = { ok: false, error: "업로드 중 오류가 발생했습니다." };
+      }
 
       setItems((prev) =>
         prev.map((it, idx) =>
@@ -115,6 +135,26 @@ export function MultiImageUpload({
         )
       );
       setProgress((p) => ({ ...p, done: p.done + 1 }));
+    }
+
+    // 동시 실행 개수를 UPLOAD_CONCURRENCY로 제한하는 워커 풀.
+    // 커서를 공유해 워커가 끝나는 대로 다음 파일을 집어간다(느린 파일이 뒤를 막지 않는다).
+    let cursor = 0;
+    async function worker() {
+      while (cursor < snapshot.length) {
+        const i = cursor++;
+        await uploadOne(i);
+      }
+    }
+    await Promise.all(
+      Array.from({ length: Math.min(UPLOAD_CONCURRENCY, snapshot.length) }, worker)
+    );
+
+    // 재검증은 전부 끝난 뒤 한 번만.
+    try {
+      await finalizeImageUploadsAction(projectId);
+    } catch {
+      // 재검증 실패가 업로드 결과 표시를 막지는 않는다.
     }
 
     setUploading(false);

@@ -217,9 +217,42 @@ export type UploadImageResult =
   | { ok: true }
   | { ok: false; error: string };
 
-// 여러 장을 순차 업로드하는 클라이언트 컴포넌트(MultiImageUpload)에서 직접 호출한다.
-// 폼 제출이 아니라 이벤트 핸들러에서 호출하므로 redirect()를 쓰지 않고 결과를
-// 반환값으로 돌려준다 — 파일 하나가 실패해도 나머지 파일 업로드를 계속 진행하기 위함이다.
+// 업로드 시작 전 1회 호출해서 현재 이미지 개수(= 새 이미지의 시작 sort_order)를 받아간다.
+// 예전에는 업로드 1장마다 count 쿼리를 돌렸는데, 병렬 업로드로 바꾸면 여러 요청이 같은
+// count 값을 읽어 sort_order가 겹친다. 시작값을 한 번만 받고 클라이언트가 인덱스를
+// 더해 쓰면 쿼리도 줄고 순서 충돌도 없다.
+export async function prepareImageUploadAction(
+  projectId: string
+): Promise<{ ok: true; startSortOrder: number } | { ok: false; error: string }> {
+  const { supabase } = await requireEditor();
+  if (!projectId) return { ok: false, error: "잘못된 요청입니다." };
+
+  const { count, error } = await supabase
+    .from("project_images")
+    .select("id", { count: "exact", head: true })
+    .eq("project_id", projectId);
+
+  if (error) return { ok: false, error: `이미지 정보 조회 실패: ${error.message}` };
+  return { ok: true, startSortOrder: count ?? 0 };
+}
+
+// 업로드가 전부 끝난 뒤 1회 호출한다.
+// 예전에는 장마다 revalidatePublic() + revalidatePath()가 돌아서, 10장이면 재검증만
+// 40회가 발생했다. 실제로 필요한 건 "전부 끝난 뒤 한 번"이므로 여기로 분리했다.
+export async function finalizeImageUploadsAction(projectId: string): Promise<void> {
+  await requireEditor();
+  if (!projectId) return;
+  revalidatePublic();
+  revalidatePath(`/admin/projects/${projectId}`);
+}
+
+// 여러 장을 병렬(동시 개수 제한) 업로드하는 클라이언트 컴포넌트(MultiImageUpload)에서
+// 직접 호출한다. 폼 제출이 아니라 이벤트 핸들러에서 호출하므로 redirect()를 쓰지 않고
+// 결과를 반환값으로 돌려준다 — 파일 하나가 실패해도 나머지 업로드를 계속 진행하기 위함이다.
+//
+// 재검증은 여기서 하지 않는다(finalizeImageUploadsAction에서 일괄 처리).
+// 단, requireEditor()는 요청마다 반드시 유지한다 — 서버 액션은 각각 독립 요청이라
+// 여기서 인증을 빼면 인증 없이 호출 가능한 업로드 엔드포인트가 되어버린다.
 export async function uploadProjectImageAction(formData: FormData): Promise<UploadImageResult> {
   const { supabase, user, profile } = await requireEditor();
   const projectId = formData.get("project_id")?.toString() ?? "";
@@ -257,17 +290,26 @@ export async function uploadProjectImageAction(formData: FormData): Promise<Uplo
     return { ok: false, error: `업로드 실패: ${uploadError.message}` };
   }
 
-  const { count } = await supabase
-    .from("project_images")
-    .select("id", { count: "exact", head: true })
-    .eq("project_id", projectId);
+  // 클라이언트가 prepareImageUploadAction으로 받은 시작값 + 인덱스를 넘겨준다.
+  // 값이 없으면(구버전 호출 등) 그때만 count 쿼리로 보정한다.
+  const rawSortOrder = Number(formData.get("sort_order"));
+  let sortOrder: number;
+  if (Number.isFinite(rawSortOrder) && rawSortOrder >= 0) {
+    sortOrder = rawSortOrder;
+  } else {
+    const { count } = await supabase
+      .from("project_images")
+      .select("id", { count: "exact", head: true })
+      .eq("project_id", projectId);
+    sortOrder = count ?? 0;
+  }
 
   const { error: insertError } = await supabase.from("project_images").insert({
     project_id: projectId,
     storage_path: storagePath,
     stage,
     is_render: false,
-    sort_order: count ?? 0,
+    sort_order: sortOrder,
     caption,
     alt_text: altText,
   });
@@ -285,8 +327,7 @@ export async function uploadProjectImageAction(formData: FormData): Promise<Uplo
     p_metadata: { storage_path: storagePath, actor_email: user.email, actor_role: profile.role },
   });
 
-  revalidatePublic();
-  revalidatePath(`/admin/projects/${projectId}`);
+  // 재검증은 전체 업로드가 끝난 뒤 finalizeImageUploadsAction에서 1회만 수행한다.
   return { ok: true };
 }
 
