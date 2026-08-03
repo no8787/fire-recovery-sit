@@ -87,7 +87,7 @@ export default async function FireCaseDetailPage({
 
       <section className="py-14 sm:py-16">
         <Container>
-          <BeforeAfter images={project.images} />
+          <BeforeAfter images={project.images} renderBadgeLabel="계획안(복구 후 예상 이미지)" />
 
           <div className="mt-10 grid gap-10 md:grid-cols-3">
             <div className="md:col-span-2">

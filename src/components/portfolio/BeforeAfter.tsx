@@ -20,7 +20,19 @@ const STAGES: {
 // 단계 구분 없는 실제 시공사진(대부분의 시공실적)은 그대로 갤러리로 보여준다.
 // 한 프로젝트에 두 종류가 섞여 있어도(예: 비교사진 일부 + 일반 갤러리 사진) 각자 보여준다 —
 // 서로 배타적이지 않다. 기존에 단계 구분 없이 등록된 이미지는 지금까지와 동일하게 갤러리로만 나간다.
-export function BeforeAfter({ images }: { images: PortfolioImageSet }) {
+// is_render=true 이미지에 붙는 배지 문구.
+// 화재복구 사례에서는 "복구 후 이렇게 됩니다"를 보여주는 계획안이고, 시공실적에서는
+// 설계 제안용 3D 렌더링이라 성격이 달라서 호출하는 쪽이 문구를 정하도록 했다.
+// (기본값은 기존 시공실적 표기를 그대로 유지한다.)
+const DEFAULT_RENDER_BADGE = "3D 렌더링 (실제 시공사진 아님)";
+
+export function BeforeAfter({
+  images,
+  renderBadgeLabel = DEFAULT_RENDER_BADGE,
+}: {
+  images: PortfolioImageSet;
+  renderBadgeLabel?: string;
+}) {
   const hasStageComparison = Boolean(images.before || images.during || images.after);
   const hasGallery = Boolean(images.gallery && images.gallery.length > 0);
 
@@ -94,7 +106,7 @@ export function BeforeAfter({ images }: { images: PortfolioImageSet }) {
                 </div>
                 {photo.isRender && (
                   <span className="absolute left-2 top-2">
-                    <Badge tone="orange">3D 렌더링 (실제 시공사진 아님)</Badge>
+                    <Badge tone="orange">{renderBadgeLabel}</Badge>
                   </span>
                 )}
                 {photo.isAiExample && (
